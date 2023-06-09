@@ -1,17 +1,12 @@
 {
+  "extends": "./tsconfig.common.json",
   "compilerOptions": {
-    "strict": true,
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "outDir": "build",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./build"
   },
   "include": [
-    "index.ts"
+    "bin/*.ts"
   ]
 }

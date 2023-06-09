@@ -8,7 +8,6 @@ export interface Team {
   name: string,
   shortLabel?: string,
   imageSrc?: string;
-  players: Player[];
 }
 
 export interface TeamInMatch {
@@ -16,12 +15,12 @@ export interface TeamInMatch {
   scored: number;
 
   penaltyScored?: number;
-  teamScoredPlayerIds?: string[];
-  teamYellowCardsPlayerIds?: string[];
-  teamRedCardsPlayerIds?: string[];
+  teamScoredPlayerNames?: string[];
+  teamYellowCardsPlayerNames?: string[];
+  teamRedCardsPlayerNames?: string[];
 }
 
-interface MatchGroupStage {
+export interface MatchGroupStage {
   groupId: string;
   roundId: string;
   groupLabel: string;

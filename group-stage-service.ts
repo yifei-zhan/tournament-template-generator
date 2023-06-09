@@ -108,14 +108,16 @@ const comparers: TeamCompareFn[] = [
 export const getTableData = ({
   teams,
   matches,
+  groupId
 }: {
   teams: Team[];
   matches: Match[];
+  groupId: string;
 }): TeamData[] => {
-  const groupStageMatches = matches.filter(match => match.groupStage !== undefined);
+  const matchesInCurrentGroup = matches.filter(match => match.groupStage?.groupId === groupId);
 
   const tableTeamsData = teams.map((team) => {
-    const currentTeamMatches = groupStageMatches.filter(match => match.teams.find(t => t.name === team.name) !== undefined);
+    const currentTeamMatches = matchesInCurrentGroup.filter(match => match.teams.find(t => t.name === team.name) !== undefined);
     return getTeamData(team, currentTeamMatches);
   });
 
