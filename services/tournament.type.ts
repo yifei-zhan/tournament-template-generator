@@ -29,6 +29,7 @@ export interface MatchGroupStage {
 
 export interface Match {
   groupStage?: MatchGroupStage;
+  isEnded: boolean;
 
   matchId: string;
   matchTime?: string;

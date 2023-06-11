@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.common.json",
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ES2022",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext"
+    }
+  }
+}

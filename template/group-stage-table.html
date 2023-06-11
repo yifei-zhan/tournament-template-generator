@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament Table</title>
+  <style>
+    body {
+      margin: 0px;
+      padding: 20px;
+    }
+
+    .table-wrapper {
+      position: relative;
+      overflow: auto;
+
+      box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -o-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -ms-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+    }
+
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      position: -webkit-sticky;
+      position: sticky;
+      padding: 8px;
+    }
+
+    th:first-child {
+      z-index: 2;
+    }
+
+    .horizontal-fixed {
+      left: 0;
+      z-index: 1;
+      background-color: inherit;
+    }
+
+    .vertical-fixed {
+      top: 0;
+      z-index: 1;
+      background-color: #6c7ae0;
+    }
+
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #6c7ae0;
+      white-space: nowrap;
+      color: white;
+    }
+
+    td:first-child,
+    th:first-child {
+      min-width: 180px;
+      text-align: left;
+    }
+
+    td {
+      text-align: center;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #f8f6ff;
+    }
+
+    .team-name-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .team-name-container img {
+      width: 25px;
+      height: 25px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="table-wrapper">
+    <table>
+      <tbody>
+        <tr>
+          <th class="horizontal-fixed vertical-fixed">球队</th>
+          <th class="vertical-fixed">完赛</th>
+          <th class="vertical-fixed">胜</th>
+          <th class="vertical-fixed">平</th>
+          <th class="vertical-fixed">负</th>
+          <th class="vertical-fixed">进球</th>
+          <th class="vertical-fixed">失球</th>
+          <th class="vertical-fixed">净胜球</th>
+          <th class="vertical-fixed">积分</th>
+        </tr>
+        <!-- %%template-start%%
+        <tr>
+          <td class="horizontal-fixed">
+            <div class="team-name-container">
+              %%image-start%%<img src="%%image-src%%" />%%image-end%%
+              <div>%%team-name%%</div>
+            </div>
+          </td>
+          <td>%%matches-total-count%%</td>
+          <td>%%win-matches-count%%</td>
+          <td>%%draw-matches-count%%</td>
+          <td>%%lose-matches-count%%</td>
+          <td>%%goals-scored%%</td>
+          <td>%%goals-against%%</td>
+          <td>%%goals-diff%%</td>
+          <td>%%points%%</td>
+        </tr>
+        %%template-end%% -->
+        <!-- %%dynamic-team-rows-start%% -->
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

@@ -5,82 +5,86 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Tournament Table</title>
   <style>
-    .tableWrapper {
+    body {
+      margin: 0px;
+      padding: 20px;
+    }
+
+    .table-wrapper {
       position: relative;
       overflow: auto;
+
+      box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -o-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
+      -ms-box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15);
     }
-
-    .header {
-      white-space: nowrap;
-    }
-
-    .fix-col-header {
-      min-width: 180px;
-      position: -webkit-sticky;
-      position: sticky;
-      left: 0;
-      background-color: #2196f3;
-      z-index: 1;
-    }
-
-    .fix-col {
-      position: -webkit-sticky;
-      position: sticky;
-      left: 0;
-      background-color: inherit;
-      z-index: 1;
-    }
-
-    .sticky-col {
-      position: -webkit-sticky;
-      position: sticky;
-    }
-
-
 
     table {
       font-family: Arial, Helvetica, sans-serif;
       border-collapse: collapse;
       width: 100%;
-      height: 500px;
-    }
-
-    @media only screen and (max-width: 600px) {
-      table {
-        height: 100%;
-      }
-    }
-
-    tr:nth-child(even) {
-      background-color: #e3f2fd;
-    }
-
-    tr:nth-child(odd) {
-      background-color: #fff;
     }
 
     td,
     th {
-      border: 1px solid #ddd;
+      position: -webkit-sticky;
+      position: sticky;
       padding: 8px;
+    }
+
+    th:first-child {
+      z-index: 2;
+    }
+
+    .horizontal-fixed {
+      left: 0;
+      z-index: 1;
+      background-color: inherit;
+    }
+
+    .vertical-fixed {
+      top: 0;
+      z-index: 1;
+      background-color: #6c7ae0;
     }
 
     th {
       padding-top: 12px;
       padding-bottom: 12px;
       text-align: left;
-      background-color: #2196f3;
+      background-color: #6c7ae0;
+      white-space: nowrap;
       color: white;
     }
 
-    .teamNameContainer {
+    td:first-child,
+    th:first-child {
+      min-width: 180px;
+      text-align: left;
+    }
+
+    td {
+      text-align: center;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fff;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #f8f6ff;
+    }
+
+    .team-name-container {
       display: flex;
       align-items: center;
     }
 
-    .teamNameContainer img {
+    .team-name-container img {
       width: 25px;
       height: 25px;
       margin-right: 10px;
@@ -89,19 +93,19 @@
 </head>
 
 <body>
-  <div class="tableWrapper">
+  <div class="table-wrapper">
     <table>
       <tbody>
         <tr>
-          <th class="fix-col-header header">球队</th>
-          <th class="sticky-col header">完赛</th>
-          <th class="sticky-col header">胜</th>
-          <th class="sticky-col header">平</th>
-          <th class="sticky-col header">负</th>
-          <th class="sticky-col header">进球</th>
-          <th class="sticky-col header">失球</th>
-          <th class="sticky-col header">净胜球</th>
-          <th class="sticky-col header">积分</th>
+          <th class="horizontal-fixed vertical-fixed">球队</th>
+          <th class="vertical-fixed">完赛</th>
+          <th class="vertical-fixed">胜</th>
+          <th class="vertical-fixed">平</th>
+          <th class="vertical-fixed">负</th>
+          <th class="vertical-fixed">进球</th>
+          <th class="vertical-fixed">失球</th>
+          <th class="vertical-fixed">净胜球</th>
+          <th class="vertical-fixed">积分</th>
         </tr>
       </tbody>
     </table>
@@ -254,7 +258,6 @@
 
     return undefined;
   }
-
   const sortTeam = (t1, t2) => {
     let result = tryGetSortResultByPoints(t1, t2);
     if (result !== undefined) {
@@ -284,28 +287,28 @@
   const mountTeam = (team) => {
     const row = document.createElement('tr');
     row.innerHTML = `
-          <td class="fix-col">
-            <div class="teamNameContainer">
+          <td class="horizontal-fixed">
+            <div class="team-name-container">
               <img src="${images[team.name]}"/>
               <div>${team.name}</div>
             </div>
           </td>
           <!-- 完赛 -->
-          <td class="sticky-col">${team.matchesCount}</td>
+          <td>${team.matchesCount}</td>
           <!-- 胜 -->
-          <td class="sticky-col">${team.matchesWonCount}</td>
+          <td>${team.matchesWonCount}</td>
           <!-- 平 -->
-          <td class="sticky-col">${team.matchesDrawCount}</td>
+          <td>${team.matchesDrawCount}</td>
           <!-- 负 -->
-          <td class="sticky-col">${team.matchesLostCount}</td>
+          <td>${team.matchesLostCount}</td>
           <!-- 进球 -->
-          <td class="sticky-col">${team.goalsScored}</td>
+          <td>${team.goalsScored}</td>
           <!-- 失球 -->
-          <td class="sticky-col">${team.goalsAgainst}</td>
+          <td>${team.goalsAgainst}</td>
           <!-- 净胜球 -->
-          <td class="sticky-col">${team.goalsDiff}</td>
+          <td>${team.goalsDiff}</td>
           <!-- 积分 -->
-          <td class="sticky-col">${team.points}</td>
+          <td>${team.points}</td>
   `;
 
     const tBody = document.querySelector("tbody");

@@ -7,7 +7,9 @@
     "generate-group-table": "./build/bin/generate-group-table.js"
   },
   "scripts": {
-    "build": "tsc && node copy-to-build.js ./input-data/*.csv"
+    "start": "ts-node --project tsconfig.dev.json index.ts",
+    "build": "tsc && npm run copy-files-to-build",
+    "copy-files-to-build": "node copy-to-build.js ./input-data/*.csv && node copy-to-build.js ./template/*.html"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
   },
   "dependencies": {
     "csv-parse": "^5.4.0",
+    "ts-node": "^10.9.1",
     "yargs": "^17.7.2"
   }
 }

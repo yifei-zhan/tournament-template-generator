@@ -1,20 +1,20 @@
 import assert from "assert";
 import { Match, Team } from "./tournament.type";
-import { CompareFn, sort } from "./utils";
+import { CompareFn, sort } from "../utils/utils";
 
 type TeamCompareFn = CompareFn<TeamData>;
 const pointsComparer: TeamCompareFn = (t1, t2) => t2.points - t1.points;
 const goalsDiffComparer: TeamCompareFn = (t1, t2) => t2.goalsDiff - t1.goalsDiff;
 const goalsScoredComparer: TeamCompareFn = (t1, t2) => t2.goalsScored - t1.goalsScored;
 const winLoseRelationComparer: TeamCompareFn = (t1, t2) => {
-  const t2WonAgainstT1 = t2.wonAgainstTeamIds.filter(id => id === t1.teamId).length;
-  const t1WonAgainstT2 = t1.wonAgainstTeamIds.filter(id => id === t2.teamId).length;
+  const t2WonAgainstT1 = t2.wonAgainstTeamNames.filter(name => name === t1.teamName).length;
+  const t1WonAgainstT2 = t1.wonAgainstTeamNames.filter(name => name === t2.teamName).length;
 
   return t2WonAgainstT1 - t1WonAgainstT2;
 }
 
 interface TeamData {
-  teamId: string;
+  teamName: string;
   teamImageSrc?: string;
   finishedMatchesCount: number;
   winMatchesCount: number;
@@ -24,7 +24,7 @@ interface TeamData {
   goalsAgainst: number;
   goalsDiff: number;
   points: number;
-  wonAgainstTeamIds: string[];
+  wonAgainstTeamNames: string[];
 }
 
 interface TeamHasScores {
@@ -54,7 +54,7 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
   let winMatchesCount = 0;
   let loseMatchesCount = 0;
   let drawMatchesCount = 0;
-  const wonAgainstTeamIds: string[] = [];
+  const wonAgainstTeamNames: string[] = [];
 
   for (const match of matches) {
     const { teams, groupStage } = match;
@@ -70,7 +70,7 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
     switch (currentTeamMatchResult) {
       case "won":
         winMatchesCount++;
-        wonAgainstTeamIds.push(opponentTeamInMatch.name);
+        wonAgainstTeamNames.push(opponentTeamInMatch.name);
         break;
       case "lost":
         loseMatchesCount++;
@@ -84,7 +84,7 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
   }
 
   return {
-    teamId: team.name,
+    teamName: team.name,
     teamImageSrc: team.imageSrc,
     finishedMatchesCount: matches.length,
     winMatchesCount,
@@ -94,7 +94,7 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
     goalsAgainst,
     goalsDiff: goalsScored - goalsAgainst,
     points: winMatchesCount * 3 + drawMatchesCount,
-    wonAgainstTeamIds
+    wonAgainstTeamNames: wonAgainstTeamNames
   }
 };
 
@@ -114,10 +114,11 @@ export const getTableData = ({
   matches: Match[];
   groupId: string;
 }): TeamData[] => {
-  const matchesInCurrentGroup = matches.filter(match => match.groupStage?.groupId === groupId);
+  const endedMatchesInCurrentGroup = matches.filter(match =>
+    match.groupStage?.groupId === groupId && match.isEnded);
 
   const tableTeamsData = teams.map((team) => {
-    const currentTeamMatches = matchesInCurrentGroup.filter(match => match.teams.find(t => t.name === team.name) !== undefined);
+    const currentTeamMatches = endedMatchesInCurrentGroup.filter(match => match.teams.find(t => t.name === team.name) !== undefined);
     return getTeamData(team, currentTeamMatches);
   });
 

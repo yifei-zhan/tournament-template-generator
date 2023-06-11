@@ -1,6 +1,6 @@
 import { parse } from "csv-parse";
 import fs from "fs";
-import { Team } from "../tournament.type";
+import { Team } from "../services/tournament.type";
 import { finished } from 'stream/promises';
 import path from "path";
 
