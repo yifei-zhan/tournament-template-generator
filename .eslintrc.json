@@ -1,0 +1,75 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "project": ["./tsconfig.dev.json"]
+  },
+  // common
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:promise/recommended",
+    "plugin:unicorn/recommended",
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "deprecation", "promise", "unicorn", "jest"],
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "curly": "error",
+    "quotes": [
+      2,
+      "double",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "no-console": "warn",
+    "object-shorthand": "error",
+    "@typescript-eslint/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "never"
+      }
+    ],
+    "@typescript-eslint/no-unnecessary-condition": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "deprecation/deprecation": "error",
+    "unicorn/consistent-function-scoping": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-array-for-each": "off",
+    "unicorn/no-array-reduce": "off",
+    "unicorn/no-document-cookie": "off",
+    "unicorn/no-negated-condition": "off",
+    "unicorn/no-nested-ternary": "off",
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/no-zero-fractions": "off",
+    "unicorn/numeric-separators-style": "off",
+    "unicorn/prefer-dom-node-append": "off",
+    "unicorn/prefer-dom-node-text-content": "off",
+    "unicorn/prefer-module": "off",
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/prefer-object-from-entries": "off",
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/prevent-abbreviations": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.test.ts"],
+      "rules": {
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "unicorn/error-message": "off",
+        "unicorn/no-null": "off",
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
+      }
+    }
+  ]
+}

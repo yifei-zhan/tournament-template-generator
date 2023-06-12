@@ -10,6 +10,6 @@ export async function createHtml(html: string, fileName: string) {
   }
 
   await fs.writeFile(filePath, html, {
-    encoding: "utf-8",
+    encoding: "utf8",
   });
 }

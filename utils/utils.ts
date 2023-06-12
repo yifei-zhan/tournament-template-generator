@@ -6,10 +6,7 @@ export function sort<T>(array: T[], comparers: CompareFn<T>[]): T[] {
 
 export function extractStrBetween(str: string, start: string, end: string): string {
   const startIndex = str.indexOf(start);
-  return str.substring(
-    startIndex + start.length + 1,
-    str.lastIndexOf(end)
-  );
+  return str.slice(startIndex + start.length + 1, str.lastIndexOf(end));
 }
 
 export function replaceOne(str: string, match: string, replaceTo: string): string {
@@ -28,15 +25,15 @@ export function replaceBetween({
   start,
   end,
   replaceTo,
-  replaceSearchingTerm
+  replaceSearchingTerm,
 }: ReplaceBetweenParams): string {
   const regexStr = `(${start})(.+?)(${end})`;
-  const replace = replaceSearchingTerm ? replaceTo : `$1${replaceTo}$3`
+  const replace = replaceSearchingTerm ? replaceTo : `$1${replaceTo}$3`;
   return str.replace(new RegExp(regexStr), replace);
 }
 
 export function insertAfter(str: string, match: string, strToBeAdded: string): string {
-  if (str.indexOf(match) === -1) {
+  if (!str.includes(match)) {
     return str;
   }
 

@@ -7,11 +7,11 @@ const pointsComparer: TeamCompareFn = (t1, t2) => t2.points - t1.points;
 const goalsDiffComparer: TeamCompareFn = (t1, t2) => t2.goalsDiff - t1.goalsDiff;
 const goalsScoredComparer: TeamCompareFn = (t1, t2) => t2.goalsScored - t1.goalsScored;
 const winLoseRelationComparer: TeamCompareFn = (t1, t2) => {
-  const t2WonAgainstT1 = t2.wonAgainstTeamNames.filter(name => name === t1.teamName).length;
-  const t1WonAgainstT2 = t1.wonAgainstTeamNames.filter(name => name === t2.teamName).length;
+  const t2WonAgainstT1 = t2.wonAgainstTeamNames.filter((name) => name === t1.teamName).length;
+  const t1WonAgainstT2 = t1.wonAgainstTeamNames.filter((name) => name === t2.teamName).length;
 
   return t2WonAgainstT1 - t1WonAgainstT2;
-}
+};
 
 interface TeamData {
   teamName: string;
@@ -33,7 +33,7 @@ interface TeamHasScores {
 }
 const getCurrentTeamMatchResult = ({
   currentTeam,
-  opponentTeam
+  opponentTeam,
 }: {
   currentTeam: TeamHasScores;
   opponentTeam: TeamHasScores;
@@ -42,11 +42,11 @@ const getCurrentTeamMatchResult = ({
   const opponentTeamScored = opponentTeam.scored + (opponentTeam.penaltyScored || 0);
 
   if (currentTeamScored === opponentTeamScored) {
-    return "draw"
+    return "draw";
   }
 
   return currentTeamScored > opponentTeamScored ? "won" : "lost";
-}
+};
 
 const getTeamData = (team: Team, matches: Match[]): TeamData => {
   let goalsScored = 0;
@@ -58,25 +58,33 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
 
   for (const match of matches) {
     const { teams, groupStage } = match;
-    const currentTeamInMatch = teams.find(t => t.name === team.name);
-    const opponentTeamInMatch = teams.find(t => t.name !== team.name);
-    assert(currentTeamInMatch && opponentTeamInMatch, `teams in matches: ${teams.map(t => t.name).join(', ')}, does not match current team: ${team.name}`);
+    const currentTeamInMatch = teams.find((t) => t.name === team.name);
+    const opponentTeamInMatch = teams.find((t) => t.name !== team.name);
+    assert(
+      currentTeamInMatch && opponentTeamInMatch,
+      `teams in matches: ${teams.map((t) => t.name).join(", ")}, does not match current team: ${
+        team.name
+      }`
+    );
     assert(groupStage);
 
     const currentTeamMatchResult = getCurrentTeamMatchResult({
       currentTeam: currentTeamInMatch,
-      opponentTeam: opponentTeamInMatch
+      opponentTeam: opponentTeamInMatch,
     });
     switch (currentTeamMatchResult) {
-      case "won":
+      case "won": {
         winMatchesCount++;
         wonAgainstTeamNames.push(opponentTeamInMatch.name);
         break;
-      case "lost":
+      }
+      case "lost": {
         loseMatchesCount++;
         break;
-      default:
-        drawMatchesCount++
+      }
+      default: {
+        drawMatchesCount++;
+      }
     }
 
     goalsScored += currentTeamInMatch.scored;
@@ -94,33 +102,36 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
     goalsAgainst,
     goalsDiff: goalsScored - goalsAgainst,
     points: winMatchesCount * 3 + drawMatchesCount,
-    wonAgainstTeamNames: wonAgainstTeamNames
-  }
+    wonAgainstTeamNames,
+  };
 };
 
 const comparers: TeamCompareFn[] = [
   pointsComparer,
   winLoseRelationComparer,
   goalsDiffComparer,
-  goalsScoredComparer
-]
+  goalsScoredComparer,
+];
 
 export const getTableData = ({
   teams,
   matches,
-  groupId
+  groupId,
 }: {
   teams: Team[];
   matches: Match[];
   groupId: string;
 }): TeamData[] => {
-  const endedMatchesInCurrentGroup = matches.filter(match =>
-    match.groupStage?.groupId === groupId && match.isEnded);
+  const endedMatchesInCurrentGroup = matches.filter(
+    (match) => match.groupStage?.groupId === groupId && match.isEnded
+  );
 
   const tableTeamsData = teams.map((team) => {
-    const currentTeamMatches = endedMatchesInCurrentGroup.filter(match => match.teams.find(t => t.name === team.name) !== undefined);
+    const currentTeamMatches = endedMatchesInCurrentGroup.filter((match) =>
+      match.teams.some((t) => t.name === team.name)
+    );
     return getTeamData(team, currentTeamMatches);
   });
 
   return sort(tableTeamsData, comparers);
-}
+};

@@ -1,10 +1,12 @@
 {
-  "extends": "./tsconfig.common.json",
+  "extends": "./tsconfig.base.json",
   "ts-node": {
     "compilerOptions": {
       "target": "ES2022",
       "module": "NodeNext",
       "moduleResolution": "NodeNext"
     }
-  }
+  },
+  "include": ["**/*.ts", "copy-to-build.js"],
+  "exclude": ["node_module"]
 }

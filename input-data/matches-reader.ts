@@ -1,7 +1,7 @@
 import { parse } from "csv-parse";
 import fs from "fs";
 import { Match, MatchGroupStage } from "../services/tournament.type";
-import { finished } from 'stream/promises';
+import { finished } from "stream/promises";
 import path from "path";
 
 interface RawMatch {
@@ -50,12 +50,15 @@ const headersRecord: Record<keyof RawMatch, undefined> = {
 const headers = Object.keys(headersRecord);
 
 const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
-  const groupStage: MatchGroupStage | undefined = rawMatch.groupLabel && rawMatch.roundLabel ? {
-    groupId: rawMatch.groupLabel,
-    groupLabel: rawMatch.groupLabel,
-    roundId: rawMatch.roundLabel,
-    roundLabel: rawMatch.roundLabel,
-  } : undefined;
+  const groupStage: MatchGroupStage | undefined =
+    rawMatch.groupLabel && rawMatch.roundLabel
+      ? {
+          groupId: rawMatch.groupLabel,
+          groupLabel: rawMatch.groupLabel,
+          roundId: rawMatch.roundLabel,
+          roundLabel: rawMatch.roundLabel,
+        }
+      : undefined;
   const isEnded = rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "";
 
   return {
@@ -65,32 +68,38 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
     fieldLabel: rawMatch.fieldLabel,
     isEnded,
 
-    teams: [{
-      name: rawMatch.team1Name,
-      scored: Number(rawMatch.team1Scored),
-      penaltyScored: rawMatch.team1PenaltyScored !== "" ? Number(rawMatch.team1PenaltyScored) : undefined,
-      teamScoredPlayerNames: rawMatch.team1ScoredPlayersNames.split(","),
-      teamYellowCardsPlayerNames: rawMatch.team1YellowCardsPlayersNames.split(","),
-      teamRedCardsPlayerNames: rawMatch.team1RedCardsPlayersNames.split(",")
-    }, {
-      name: rawMatch.team2Name,
-      scored: Number(rawMatch.team2Scored),
-      penaltyScored: rawMatch.team2PenaltyScored !== "" ? Number(rawMatch.team2PenaltyScored) : undefined,
-      teamScoredPlayerNames: rawMatch.team2ScoredPlayersNames.split(","),
-      teamYellowCardsPlayerNames: rawMatch.team2YellowCardsPlayersNames.split(","),
-      teamRedCardsPlayerNames: rawMatch.team2RedCardsPlayersNames.split(",")
-    }]
-  }
-}
+    teams: [
+      {
+        name: rawMatch.team1Name,
+        scored: Number(rawMatch.team1Scored),
+        penaltyScored:
+          rawMatch.team1PenaltyScored !== "" ? Number(rawMatch.team1PenaltyScored) : undefined,
+        teamScoredPlayerNames: rawMatch.team1ScoredPlayersNames.split(","),
+        teamYellowCardsPlayerNames: rawMatch.team1YellowCardsPlayersNames.split(","),
+        teamRedCardsPlayerNames: rawMatch.team1RedCardsPlayersNames.split(","),
+      },
+      {
+        name: rawMatch.team2Name,
+        scored: Number(rawMatch.team2Scored),
+        penaltyScored:
+          rawMatch.team2PenaltyScored !== "" ? Number(rawMatch.team2PenaltyScored) : undefined,
+        teamScoredPlayerNames: rawMatch.team2ScoredPlayersNames.split(","),
+        teamYellowCardsPlayerNames: rawMatch.team2YellowCardsPlayersNames.split(","),
+        teamRedCardsPlayerNames: rawMatch.team2RedCardsPlayersNames.split(","),
+      },
+    ],
+  };
+};
 export const getAllMatches = async (): Promise<Match[]> => {
   const matches: RawMatch[] = [];
 
-  const parser = fs.createReadStream(path.join(__dirname, "./matches.csv"))
-    .pipe(parse({
+  const parser = fs.createReadStream(path.join(__dirname, "./matches.csv")).pipe(
+    parse({
       delimiter: ";",
       columns: [...headers],
-      from_line: 2
-    }));
+      from_line: 2,
+    })
+  );
 
   parser.on("readable", () => {
     let record: RawMatch;
