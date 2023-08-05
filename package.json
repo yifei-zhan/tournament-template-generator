@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "description": "A simple tool which can generate football games relevant html template from csv data",
   "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "bin": {
     "generate-group-table": "./build/bin/generate-group-table.js"
   },
   "scripts": {
     "lint": "tsc --project tsconfig.dev.json --noEmit && eslint . --ext=ts --max-warnings=0",
     "start": "ts-node --project tsconfig.dev.json index.ts",
-    "build": "tsc --project tsconfig.prod.json && npm run copy-files-to-build",
-    "copy-files-to-build": "node copy-to-build.js ./input-data/*.csv && node copy-to-build.js ./template/*.html",
+    "build": "tsc --project tsconfig.prod.json && npm run ensure-folders-existence && npm run copy-files-to-build",
+    "ensure-folders-existence": "node ensure-build-folders-existence",
+    "copy-files-to-build": "node copy-to-build.js ./input/*.csv && node copy-to-build.js ./template/*.html",
     "prepare": "husky install"
   },
   "repository": {

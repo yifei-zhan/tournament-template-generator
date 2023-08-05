@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import assert from "assert";
+const fs = require("fs");
+const path = require("path");
+const assert = require("assert");
 
 assert(process.argv.length >= 3, "Source file path must be specified");
 

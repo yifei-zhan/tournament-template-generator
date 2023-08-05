@@ -7,7 +7,7 @@
 5. check the added symlink: `npm ls -g --depth=0 --link=true`
 6. execute the file: [file-name] [options]
    - `generate-group-table --gid A`
-7. cleanup: `sudo npm rm -g [symlink-name]`
+7. cleanup: `sudo npm rm -g [symlink-name]` (symlink-name does not contain the version)
 
 #### TODO
 

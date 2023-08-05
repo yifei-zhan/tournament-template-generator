@@ -1,5 +1,5 @@
-import { getAllMatches } from "./input-data/matches-reader";
-import { getAllTeams } from "./input-data/teams-reader";
+import { getAllMatches } from "./services/matches-reader";
+import { getAllTeams } from "./services/teams-reader";
 import { getTableData } from "./services/group-stage-service";
 import { readFile } from "fs/promises";
 import path from "path";

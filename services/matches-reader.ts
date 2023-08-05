@@ -1,6 +1,6 @@
 import { parse } from "csv-parse";
 import fs from "fs";
-import { Match, MatchGroupStage } from "../services/tournament.type";
+import { Match, MatchGroupStage } from "./tournament.type";
 import { finished } from "stream/promises";
 import path from "path";
 
@@ -93,7 +93,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
 export const getAllMatches = async (): Promise<Match[]> => {
   const matches: RawMatch[] = [];
 
-  const parser = fs.createReadStream(path.join(__dirname, "./matches.csv")).pipe(
+  const parser = fs.createReadStream(path.join(__dirname, "../input/matches.csv")).pipe(
     parse({
       delimiter: ";",
       columns: [...headers],
