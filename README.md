@@ -11,5 +11,9 @@
 
 #### TODO
 
-1. more elegant add/remove executable to global
-2. table title also configurable?
+1. 射手榜
+2. 红黄牌榜
+3. 比赛结果
+4. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
+5. application as a service(go cloud?)
+6. 其他优化

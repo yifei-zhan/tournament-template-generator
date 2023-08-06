@@ -10,8 +10,8 @@
     "generate-group-table": "./build/bin/generate-group-table.js"
   },
   "scripts": {
-    "lint": "tsc --project tsconfig.dev.json --noEmit && eslint . --ext=ts --max-warnings=0",
-    "start": "ts-node --project tsconfig.dev.json index.ts",
+    "lint": "tsc --project tsconfig.json --noEmit && eslint . --ext=ts --max-warnings=0",
+    "start": "ts-node --project tsconfig.json index.ts",
     "build": "tsc --project tsconfig.prod.json && npm run ensure-folders-existence && npm run copy-files-to-build",
     "ensure-folders-existence": "node ensure-build-folders-existence",
     "copy-files-to-build": "node copy-to-build.js ./input/*.csv && node copy-to-build.js ./template/*.html",
