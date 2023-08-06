@@ -26,7 +26,7 @@ const mapRawTeamToTeam = (rawTeam: RawTeam): Team => ({
 export const getAllTeams = async (): Promise<Team[]> => {
   const teams: RawTeam[] = [];
 
-  const parser = fs.createReadStream(path.join(__dirname, "../input/teams.csv")).pipe(
+  const parser = fs.createReadStream(path.join(__dirname, "../../input/teams.csv")).pipe(
     parse({
       delimiter: ";",
       columns: [...headers],

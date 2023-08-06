@@ -6,5 +6,5 @@
     "moduleResolution": "NodeNext",
     "outDir": "./build"
   },
-  "include": ["bin/*.ts"]
+  "include": ["src", "bin/*.ts"]
 }

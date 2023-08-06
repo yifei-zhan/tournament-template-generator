@@ -1,10 +1,10 @@
-import { getAllMatches } from "./services/matches-reader";
-import { getAllTeams } from "./services/teams-reader";
-import { getTableData } from "./services/group-stage-service";
+import { getAllMatches } from "../services/matches-reader";
+import { getAllTeams } from "../services/teams-reader";
+import { getTableData } from "../services/group-stage-service";
 import { readFile } from "fs/promises";
 import path from "path";
-import { extractStrBetween, insertAfter, replaceBetween, replaceOne } from "./utils/utils";
-import { createHtml } from "./template/template-service";
+import { extractStrBetween, insertAfter, replaceBetween, replaceOne } from "../utils/utils";
+import { createHtml } from "../services/template-service";
 
 interface GenerateParams {
   groupId: string;
@@ -36,7 +36,7 @@ export async function generate({ groupId }: GenerateParams) {
   const [matches, teams, template] = await Promise.all([
     getAllMatches(),
     getAllTeams(),
-    readFile(path.join(__dirname, "./template/group-stage-table.html"), { encoding: "utf8" }),
+    readFile(path.join(__dirname, `../../input/${htmlFileName}`), { encoding: "utf8" }),
   ]);
 
   const table = getTableData({

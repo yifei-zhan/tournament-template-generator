@@ -1,5 +1,5 @@
-import { generate } from "./group-stage-generator";
+import { generate } from "./src/generators/group-stage-generator";
 
 generate({
-  groupId: "A"
+  groupId: "A",
 });

@@ -11,7 +11,8 @@ assert(sourceRelativePathes.length > 0);
 for (const sourcePath of sourceRelativePathes) {
   const source = path.join(__dirname, sourcePath);
   const destination = path.join(__dirname, "build", sourcePath);
-  assert(fs.existsSync(source), "Source file doesn't exist");
+
+  assert(fs.existsSync(source), `Source file: ${source} doesn't exist`);
 
   fs.copyFileSync(source, destination);
 }

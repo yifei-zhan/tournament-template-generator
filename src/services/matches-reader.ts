@@ -93,7 +93,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
 export const getAllMatches = async (): Promise<Match[]> => {
   const matches: RawMatch[] = [];
 
-  const parser = fs.createReadStream(path.join(__dirname, "../input/matches.csv")).pipe(
+  const parser = fs.createReadStream(path.join(__dirname, "../../input/matches.csv")).pipe(
     parse({
       delimiter: ";",
       columns: [...headers],

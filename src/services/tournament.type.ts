@@ -5,8 +5,8 @@ export interface Player {
 }
 
 export interface Team {
-  name: string,
-  shortLabel?: string,
+  name: string;
+  shortLabel?: string;
   imageSrc?: string;
 }
 
