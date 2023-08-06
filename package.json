@@ -2,7 +2,7 @@
   "name": "tournament",
   "version": "1.0.0",
   "description": "A simple tool which can generate football games relevant html template from csv data",
-  "main": "build/index.js",
+  "main": "bin/*.js",
   "engines": {
     "node": ">=18"
   },
