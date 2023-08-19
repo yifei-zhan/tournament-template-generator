@@ -1,3 +1,10 @@
+import assert from "assert";
+
+export const ensureDefined = <T>(data: T | undefined): T => {
+  assert(data);
+  return data;
+};
+
 export type CompareFn<T> = (x: T, y: T) => number;
 
 export function sort<T>(array: T[], comparers: CompareFn<T>[]): T[] {
@@ -43,3 +50,60 @@ export function insertAfter(str: string, match: string, strToBeAdded: string): s
 
   return `${strBefore}${strToBeAdded}${strAfter}`;
 }
+
+export const getStrAsciiSum = (str: string) =>
+  [...str].reduce((sum, currentChar) => sum + (currentChar.codePointAt(0) ?? 0), 0);
+
+interface GetRankingsParams<T> {
+  items: T[];
+  comparers: CompareFn<T>[];
+  getWeight: (item: T) => number;
+}
+
+// Return rankings taking care of equally weighted item
+export const getRankings = <T>({
+  items,
+  comparers,
+  getWeight,
+}: GetRankingsParams<T>): Array<{ ranking: number; data: T }> => {
+  if (items.length === 0) {
+    return [];
+  }
+
+  const sortedItems = sort(items, comparers);
+  const grouppedItems: T[][] = [];
+
+  for (const item of sortedItems) {
+    if (grouppedItems.length === 0) {
+      grouppedItems.push([item]);
+      continue;
+    }
+
+    const currentWeight = getWeight(item);
+    // eslint-disable-next-line unicorn/prefer-at
+    const lastGroup = ensureDefined(grouppedItems[grouppedItems.length - 1]);
+    const weightInLastGroup = getWeight(ensureDefined(lastGroup[0]));
+
+    if (currentWeight === weightInLastGroup) {
+      lastGroup.push(item);
+    } else {
+      grouppedItems.push([item]);
+    }
+  }
+
+  const result: Array<{ ranking: number; data: T }> = [];
+
+  let currentRanking = 1;
+  for (const grouppedItem of grouppedItems) {
+    for (const item of grouppedItem) {
+      result.push({
+        data: item,
+        ranking: currentRanking,
+      });
+    }
+
+    currentRanking += grouppedItem.length;
+  }
+
+  return result;
+};

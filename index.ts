@@ -1,5 +1,10 @@
-import { generate } from "./src/generators/group-stage-generator";
+import { getAllMatches } from "./src/services/matches-reader";
+import { getSortedScoresRankingData } from "./src/services/scores-ranking-service";
 
-generate({
-  groupId: "A",
-});
+async function run() {
+  const matches = await getAllMatches();
+
+  getSortedScoresRankingData(matches);
+}
+
+run();

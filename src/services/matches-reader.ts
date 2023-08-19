@@ -49,6 +49,14 @@ const headersRecord: Record<keyof RawMatch, undefined> = {
 };
 const headers = Object.keys(headersRecord);
 
+const mapCommaDelimiterStrToArr = (raw: string): string[] => {
+  if (raw === "") {
+    return [];
+  }
+
+  return raw.split(",");
+};
+
 const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
   const groupStage: MatchGroupStage | undefined =
     rawMatch.groupLabel && rawMatch.roundLabel
@@ -74,18 +82,22 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
         scored: Number(rawMatch.team1Scored),
         penaltyScored:
           rawMatch.team1PenaltyScored !== "" ? Number(rawMatch.team1PenaltyScored) : undefined,
-        teamScoredPlayerNames: rawMatch.team1ScoredPlayersNames.split(","),
-        teamYellowCardsPlayerNames: rawMatch.team1YellowCardsPlayersNames.split(","),
-        teamRedCardsPlayerNames: rawMatch.team1RedCardsPlayersNames.split(","),
+        teamScoredPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team1ScoredPlayersNames),
+        teamYellowCardsPlayerNames: mapCommaDelimiterStrToArr(
+          rawMatch.team1YellowCardsPlayersNames
+        ),
+        teamRedCardsPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team1RedCardsPlayersNames),
       },
       {
         name: rawMatch.team2Name,
         scored: Number(rawMatch.team2Scored),
         penaltyScored:
           rawMatch.team2PenaltyScored !== "" ? Number(rawMatch.team2PenaltyScored) : undefined,
-        teamScoredPlayerNames: rawMatch.team2ScoredPlayersNames.split(","),
-        teamYellowCardsPlayerNames: rawMatch.team2YellowCardsPlayersNames.split(","),
-        teamRedCardsPlayerNames: rawMatch.team2RedCardsPlayersNames.split(","),
+        teamScoredPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team2ScoredPlayersNames),
+        teamYellowCardsPlayerNames: mapCommaDelimiterStrToArr(
+          rawMatch.team2YellowCardsPlayersNames
+        ),
+        teamRedCardsPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team2RedCardsPlayersNames),
       },
     ],
   };

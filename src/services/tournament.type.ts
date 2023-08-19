@@ -15,9 +15,9 @@ export interface TeamInMatch {
   scored: number;
 
   penaltyScored?: number;
-  teamScoredPlayerNames?: string[];
-  teamYellowCardsPlayerNames?: string[];
-  teamRedCardsPlayerNames?: string[];
+  teamScoredPlayerNames: string[];
+  teamYellowCardsPlayerNames: string[];
+  teamRedCardsPlayerNames: string[];
 }
 
 export interface MatchGroupStage {

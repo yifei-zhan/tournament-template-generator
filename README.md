@@ -12,6 +12,8 @@
 #### TODO
 
 1. 射手榜
+   _. services..
+   _. test
 2. 红黄牌榜
 3. 比赛结果
 4. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
