@@ -10,6 +10,9 @@ interface GenerateParams {
   groupId: string;
 }
 
+const htmlFileName = "group-stage-table.html";
+const rowsStart = "<!-- %%dynamic-team-rows-start%% -->";
+
 const teamBlockStart = "%%template-start%%";
 const teamBlockEnd = "%%template-end%%";
 
@@ -28,11 +31,7 @@ const goalsAgainst = "%%goals-against%%";
 const goalsDiff = "%%goals-diff%%";
 const points = "%%points%%";
 
-const rowsStart = "<!-- %%dynamic-team-rows-start%% -->";
-
-const htmlFileName = "group-stage-table.html";
-
-export async function generate({ groupId }: GenerateParams) {
+export async function generateGroupStageTable({ groupId }: GenerateParams) {
   const [matches, teams, template] = await Promise.all([
     getAllMatches(),
     getAllTeams(),

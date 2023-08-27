@@ -1,10 +1,7 @@
-import { getAllMatches } from "./src/services/matches-reader";
-import { getSortedScoresRankingData } from "./src/services/scores-ranking-service";
+import { generateScoresRankingTable } from "./src/generators/scores-ranking-generator";
 
 async function run() {
-  const matches = await getAllMatches();
-
-  getSortedScoresRankingData(matches);
+  await generateScoresRankingTable();
 }
 
 run();

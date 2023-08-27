@@ -57,14 +57,14 @@ export const getStrAsciiSum = (str: string) =>
 interface GetRankingsParams<T> {
   items: T[];
   comparers: CompareFn<T>[];
-  getWeight: (item: T) => number;
+  getRankingCriteria: (item: T) => number;
 }
 
 // Return rankings taking care of equally weighted item
-export const getRankings = <T>({
+export const getWithRankings = <T>({
   items,
   comparers,
-  getWeight,
+  getRankingCriteria,
 }: GetRankingsParams<T>): Array<{ ranking: number; data: T }> => {
   if (items.length === 0) {
     return [];
@@ -79,10 +79,10 @@ export const getRankings = <T>({
       continue;
     }
 
-    const currentWeight = getWeight(item);
+    const currentWeight = getRankingCriteria(item);
     // eslint-disable-next-line unicorn/prefer-at
     const lastGroup = ensureDefined(grouppedItems[grouppedItems.length - 1]);
-    const weightInLastGroup = getWeight(ensureDefined(lastGroup[0]));
+    const weightInLastGroup = getRankingCriteria(ensureDefined(lastGroup[0]));
 
     if (currentWeight === weightInLastGroup) {
       lastGroup.push(item);

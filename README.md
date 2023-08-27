@@ -11,11 +11,10 @@
 
 #### TODO
 
-1. 射手榜
-   _. services..
-   _. test
-2. 红黄牌榜
-3. 比赛结果
-4. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
-5. application as a service(go cloud?)
-6. 其他优化
+1. extend generate group tables (without groupId then generate n template with proper name)
+2. Add one more script, generate for all service
+3. 红黄牌榜
+4. 比赛结果
+5. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
+6. application as a service(go cloud?)
+7. 其他优化

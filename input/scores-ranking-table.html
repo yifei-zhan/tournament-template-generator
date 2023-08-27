@@ -87,6 +87,15 @@
     tr:nth-child(odd) {
       background-color: #f8f6ff;
     }
+
+    .textLeftAligned {
+      text-align: left;
+    }
+
+    .textNonBreak {
+      white-space: nowrap;
+    }
+
   </style>
 </head>
 
@@ -103,9 +112,9 @@
         <!-- %%template-start%%
         <tr>
           <td>%%ranking%%</td>
-          <td>%%player-name%%</td>
-          <td>%%team-name%%</td>
-          <td>%%scores-count%%</td>
+          <td class="textLeftAligned textNonBreak">%%player-name%%</td>
+          <td class="textLeftAligned textNonBreak">%%team-name%%</td>
+          <td class="textLeftAligned">%%scores-count%%</td>
         </tr>
         %%template-end%% -->
         <!-- %%dynamic-team-rows-start%% -->

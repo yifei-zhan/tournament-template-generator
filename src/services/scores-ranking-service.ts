@@ -1,5 +1,5 @@
 import { Match } from "./tournament.type";
-import { getRankings, getStrAsciiSum } from "../utils/utils";
+import { getWithRankings, getStrAsciiSum } from "../utils/utils";
 
 const getKeyName = (playerName: string, teamName: string) => playerName + "/" + teamName;
 
@@ -73,9 +73,9 @@ export const getSortedScoresRankingData = (matches: Match[]): ScoresRanking[] =>
 
   const playersScoresRecord = getPlayersScoresRecord(filteredMatches);
 
-  return getRankings({
+  return getWithRankings({
     items: Object.values(playersScoresRecord),
-    getWeight: (item) => item.scores,
+    getRankingCriteria: (item) => item.scores,
     comparers: scoresRankingDataComparers,
   }).map((item) => ({
     ...item.data,
