@@ -1,16 +1,13 @@
 import { getAllMatches } from "../services/matches-reader";
 import { getAllTeams } from "../services/teams-reader";
-import { getTableData } from "../services/group-stage-service";
+import { getAllGroupIds, getTableData } from "../services/group-stage-service";
 import { readFile } from "fs/promises";
 import path from "path";
 import { extractStrBetween, insertAfter, replaceBetween, replaceOne } from "../utils/utils";
 import { createHtml } from "../services/template-service";
+import { Match, Team } from "../services/tournament.type";
 
-interface GenerateParams {
-  groupId: string;
-}
-
-const htmlFileName = "group-stage-table.html";
+const templateFileName = "group-stage-table.html";
 const rowsStart = "<!-- %%dynamic-team-rows-start%% -->";
 
 const teamBlockStart = "%%template-start%%";
@@ -31,16 +28,22 @@ const goalsAgainst = "%%goals-against%%";
 const goalsDiff = "%%goals-diff%%";
 const points = "%%points%%";
 
-export async function generateGroupStageTable({ groupId }: GenerateParams) {
-  const [matches, teams, template] = await Promise.all([
-    getAllMatches(),
-    getAllTeams(),
-    readFile(path.join(__dirname, `../../input/${htmlFileName}`), { encoding: "utf8" }),
-  ]);
+interface GenerateGroupStageTableParams {
+  groupId: string;
+  allMatches: Match[];
+  allTeams: Team[];
+  template: string;
+}
 
+const generateGroupStageTable = async ({
+  groupId,
+  allMatches,
+  allTeams,
+  template,
+}: GenerateGroupStageTableParams) => {
   const table = getTableData({
-    teams,
-    matches,
+    allTeams,
+    allMatches,
     groupId,
   });
 
@@ -76,6 +79,34 @@ export async function generateGroupStageTable({ groupId }: GenerateParams) {
     })
     .join("\n");
 
+  const outputFileName = `group-stage-table-group-${groupId}.html`;
   const result = insertAfter(template, rowsStart, `\n${rows}\n`);
-  await createHtml(result, htmlFileName);
+  await createHtml(result, outputFileName);
+};
+
+interface GenerateParams {
+  groupId?: string;
+}
+
+export async function generateGroupStageTables(params?: GenerateParams) {
+  const groupId = params?.groupId;
+
+  const [matches, teams, template] = await Promise.all([
+    getAllMatches(),
+    getAllTeams(),
+    readFile(path.join(__dirname, `../../input/${templateFileName}`), { encoding: "utf8" }),
+  ]);
+
+  const groupIds = !!groupId ? [groupId] : getAllGroupIds(teams);
+
+  const templateTasks = groupIds.map((groupId) =>
+    generateGroupStageTable({
+      groupId,
+      allTeams: teams,
+      allMatches: matches,
+      template,
+    })
+  );
+
+  await Promise.all(templateTasks);
 }

@@ -26,7 +26,7 @@ interface RawMatch {
   team2PenaltyScored: string;
 }
 
-const headersRecord: Record<keyof RawMatch, undefined> = {
+const headersRecordInOrder: Record<keyof RawMatch, undefined> = {
   matchId: undefined,
   matchTime: undefined,
   fieldLabel: undefined,
@@ -47,7 +47,7 @@ const headersRecord: Record<keyof RawMatch, undefined> = {
   team1RedCardsPlayersNames: undefined,
   team2RedCardsPlayersNames: undefined,
 };
-const headers = Object.keys(headersRecord);
+const headers = Object.keys(headersRecordInOrder);
 
 const mapCommaDelimiterStrToArr = (raw: string): string[] => {
   if (raw === "") {

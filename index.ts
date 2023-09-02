@@ -1,7 +1,7 @@
-import { generateScoresRankingTable } from "./src/generators/scores-ranking-generator";
+import { generateGroupStageTables } from "./src/generators/group-stage-generator";
 
 async function run() {
-  await generateScoresRankingTable();
+  await generateGroupStageTables();
 }
 
 run();

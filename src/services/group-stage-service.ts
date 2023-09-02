@@ -1,6 +1,6 @@
 import assert from "assert";
 import { Match, Team } from "./tournament.type";
-import { CompareFn, sort } from "../utils/utils";
+import { CompareFn, getStrAsciiSum, sort } from "../utils/utils";
 
 type TeamCompareFn = CompareFn<TeamData>;
 const pointsComparer: TeamCompareFn = (t1, t2) => t2.points - t1.points;
@@ -113,25 +113,40 @@ const comparers: TeamCompareFn[] = [
   goalsScoredComparer,
 ];
 
-export const getTableData = ({
-  teams,
-  matches,
-  groupId,
-}: {
-  teams: Team[];
-  matches: Match[];
+interface GetTableDataParams {
+  allTeams: Team[];
+  allMatches: Match[];
   groupId: string;
-}): TeamData[] => {
-  const endedMatchesInCurrentGroup = matches.filter(
+}
+
+export const getTableData = ({ allTeams, allMatches, groupId }: GetTableDataParams): TeamData[] => {
+  const endedMatchesInCurrentGroup = allMatches.filter(
     (match) => match.groupStage?.groupId === groupId && match.isEnded
   );
 
-  const tableTeamsData = teams.map((team) => {
+  const teamsInCurrentGroup = allTeams.filter((team) => team.groupId === groupId);
+
+  const tableTeamsData = teamsInCurrentGroup.map((team) => {
     const currentTeamMatches = endedMatchesInCurrentGroup.filter((match) =>
       match.teams.some((t) => t.name === team.name)
     );
+
     return getTeamData(team, currentTeamMatches);
   });
 
   return sort(tableTeamsData, comparers);
+};
+
+export const getAllGroupIds = (teams: Team[]) => {
+  const groupIds = new Set<string>();
+
+  teams.forEach((team) => {
+    groupIds.add(team.groupId);
+  });
+
+  const sortedGroupIds = [...groupIds].sort(
+    (groupId1, groupId2) => getStrAsciiSum(groupId1) - getStrAsciiSum(groupId2)
+  );
+
+  return sortedGroupIds;
 };

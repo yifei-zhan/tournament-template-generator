@@ -2,10 +2,10 @@
 
 import yargs from "yargs";
 import helpers from "yargs/helpers";
-import { generateGroupStageTable } from "../src/generators/group-stage-generator";
+import { generateGroupStageTables } from "../src/generators/group-stage-generator";
 
 yargs(helpers.hideBin(process.argv))
-  .usage("$0 --gid=groupId")
+  .usage("$0 [--gid=groupId]")
   .command(
     "$0",
     "",
@@ -15,10 +15,9 @@ yargs(helpers.hideBin(process.argv))
         alias: "gid",
         describe: "Group Id",
         type: "string",
-        demandOption: true,
       }).argv;
 
-      await generateGroupStageTable(argv);
+      await generateGroupStageTables(argv);
     }
   )
   .parse();

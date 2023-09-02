@@ -7,7 +7,8 @@
     "node": ">=18"
   },
   "bin": {
-    "generate-group-table": "./build/bin/generate-group-table.js",
+    "generate-all": "./build/bin/generate-all.js",
+    "generate-group-tables": "./build/bin/generate-group-tables.js",
     "generate-scores-rankings-table": "./build/bin/generate-scores-ranking-table.js"
   },
   "scripts": {

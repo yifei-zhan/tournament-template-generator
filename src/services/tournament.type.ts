@@ -6,6 +6,7 @@ export interface Player {
 
 export interface Team {
   name: string;
+  groupId: string;
   shortLabel?: string;
   imageSrc?: string;
 }

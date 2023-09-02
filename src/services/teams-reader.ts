@@ -8,19 +8,22 @@ interface RawTeam {
   name: string;
   shortLabel: string;
   imageSrc: string;
+  groupId: string;
 }
 
-const headersRecord: Record<keyof RawTeam, undefined> = {
+const headersRecordInOrder: Record<keyof RawTeam, undefined> = {
   name: undefined,
   shortLabel: undefined,
+  groupId: undefined,
   imageSrc: undefined,
 };
-const headers = Object.keys(headersRecord);
+const headers = Object.keys(headersRecordInOrder);
 
 const mapRawTeamToTeam = (rawTeam: RawTeam): Team => ({
   name: rawTeam.name,
   shortLabel: rawTeam.shortLabel !== "" ? rawTeam.shortLabel : undefined,
   imageSrc: rawTeam.imageSrc !== "" ? rawTeam.imageSrc : undefined,
+  groupId: rawTeam.groupId,
 });
 
 export const getAllTeams = async (): Promise<Team[]> => {
