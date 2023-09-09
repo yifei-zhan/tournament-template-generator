@@ -14,6 +14,7 @@ interface RawMatch {
   team1Name: string;
   team1Scored: string;
   team1ScoredPlayersNames: string;
+  team1AssistancePlayerNames: string;
   team1YellowCardsPlayersNames: string;
   team1RedCardsPlayersNames: string;
   team1PenaltyScored: string;
@@ -21,6 +22,7 @@ interface RawMatch {
   team2Name: string;
   team2Scored: string;
   team2ScoredPlayersNames: string;
+  team2AssistancePlayerNames: string;
   team2YellowCardsPlayersNames: string;
   team2RedCardsPlayersNames: string;
   team2PenaltyScored: string;
@@ -42,6 +44,8 @@ const headersRecordInOrder: Record<keyof RawMatch, undefined> = {
 
   team1ScoredPlayersNames: undefined,
   team2ScoredPlayersNames: undefined,
+  team1AssistancePlayerNames: undefined,
+  team2AssistancePlayerNames: undefined,
   team1YellowCardsPlayersNames: undefined,
   team2YellowCardsPlayersNames: undefined,
   team1RedCardsPlayersNames: undefined,
@@ -83,6 +87,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
         penaltyScored:
           rawMatch.team1PenaltyScored !== "" ? Number(rawMatch.team1PenaltyScored) : undefined,
         teamScoredPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team1ScoredPlayersNames),
+        teamAssistancePlayerNames: mapCommaDelimiterStrToArr(rawMatch.team1AssistancePlayerNames),
         teamYellowCardsPlayerNames: mapCommaDelimiterStrToArr(
           rawMatch.team1YellowCardsPlayersNames
         ),
@@ -94,6 +99,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
         penaltyScored:
           rawMatch.team2PenaltyScored !== "" ? Number(rawMatch.team2PenaltyScored) : undefined,
         teamScoredPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team2ScoredPlayersNames),
+        teamAssistancePlayerNames: mapCommaDelimiterStrToArr(rawMatch.team2AssistancePlayerNames),
         teamYellowCardsPlayerNames: mapCommaDelimiterStrToArr(
           rawMatch.team2YellowCardsPlayersNames
         ),

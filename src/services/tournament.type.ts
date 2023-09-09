@@ -17,6 +17,7 @@ export interface TeamInMatch {
 
   penaltyScored?: number;
   teamScoredPlayerNames: string[];
+  teamAssistancePlayerNames: string[];
   teamYellowCardsPlayerNames: string[];
   teamRedCardsPlayerNames: string[];
 }
