@@ -24,9 +24,7 @@ export interface TeamInMatch {
 
 export interface MatchGroupStage {
   groupId: string;
-  roundId: string;
   groupLabel: string;
-  roundLabel: string;
 }
 
 export interface Match {

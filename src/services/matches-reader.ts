@@ -3,6 +3,7 @@ import fs from "fs";
 import { Match, MatchGroupStage } from "./tournament.type";
 import { finished } from "stream/promises";
 import path from "path";
+import { CommaDelimiter } from "./file-reader-utils";
 
 interface RawMatch {
   matchId: string;
@@ -62,15 +63,12 @@ const mapCommaDelimiterStrToArr = (raw: string): string[] => {
 };
 
 const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
-  const groupStage: MatchGroupStage | undefined =
-    rawMatch.groupLabel && rawMatch.roundLabel
-      ? {
-          groupId: rawMatch.groupLabel,
-          groupLabel: rawMatch.groupLabel,
-          roundId: rawMatch.roundLabel,
-          roundLabel: rawMatch.roundLabel,
-        }
-      : undefined;
+  const groupStage: MatchGroupStage | undefined = rawMatch.groupLabel
+    ? {
+        groupId: rawMatch.groupLabel,
+        groupLabel: rawMatch.groupLabel,
+      }
+    : undefined;
   const isEnded = rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "";
 
   return {
@@ -113,7 +111,7 @@ export const getAllMatches = async (): Promise<Match[]> => {
 
   const parser = fs.createReadStream(path.join(__dirname, "../../input/matches.csv")).pipe(
     parse({
-      delimiter: ";",
+      delimiter: CommaDelimiter,
       columns: [...headers],
       from_line: 2,
     })

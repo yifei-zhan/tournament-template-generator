@@ -3,6 +3,7 @@ import fs from "fs";
 import { Team } from "./tournament.type";
 import { finished } from "stream/promises";
 import path from "path";
+import { CommaDelimiter } from "./file-reader-utils";
 
 interface RawTeam {
   name: string;
@@ -31,7 +32,7 @@ export const getAllTeams = async (): Promise<Team[]> => {
 
   const parser = fs.createReadStream(path.join(__dirname, "../../input/teams.csv")).pipe(
     parse({
-      delimiter: ";",
+      delimiter: CommaDelimiter,
       columns: [...headers],
       from_line: 2,
     })

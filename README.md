@@ -11,8 +11,13 @@
 
 #### TODO
 
-1. 红黄牌榜
-2. 比赛结果
-3. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
-4. application as a service(go cloud?)
-5. 其他优化
+1. match check
+   1. 进球数 match 进球人数
+2. 助攻榜
+3. 红黄牌榜
+4. 完赛结果
+5. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
+6. application as a service(go cloud?)
+7. 其他优化
+   _. node -> exec 文件: https://github.com/nexe/nexe?
+   _. 队员号码 id(low prior)
