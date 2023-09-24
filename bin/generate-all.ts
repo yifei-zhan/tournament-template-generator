@@ -2,8 +2,8 @@
 
 import yargs from "yargs";
 import helpers from "yargs/helpers";
-import { generateScoresRankingTable } from "../src/generators/scores-ranking-generator";
 import { generateGroupStageTables } from "../src/generators/group-stage-generator";
+import { generatePlayersScoresRankingTable } from "../src/generators/scores-ranking-generator";
 
 yargs(helpers.hideBin(process.argv))
   .command(
@@ -12,7 +12,7 @@ yargs(helpers.hideBin(process.argv))
     () => ({}),
     async () => {
       await generateGroupStageTables();
-      await generateScoresRankingTable();
+      await generatePlayersScoresRankingTable();
     }
   )
   .parse();

@@ -2,15 +2,15 @@
 
 import yargs from "yargs";
 import helpers from "yargs/helpers";
-import { generateScoresRankingTable } from "../src/generators/scores-ranking-generator";
+import { generatePlayersScoresRankingTable } from "../src/generators/scores-ranking-generator";
 
 yargs(helpers.hideBin(process.argv))
   .command(
     "$0",
-    "hihihi",
+    "",
     () => ({}),
     async () => {
-      await generateScoresRankingTable();
+      await generatePlayersScoresRankingTable();
     }
   )
   .parse();
