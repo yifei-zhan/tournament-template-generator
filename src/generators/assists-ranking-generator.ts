@@ -5,12 +5,12 @@ import { generatePlayersRankingTable } from "./common-players-ranking-generator"
 const getSortedRankingData = (matches: Match[]) =>
   getPlayersRankingData({
     matches,
-    getRankingDataFrom: (teamInMatch) => teamInMatch.teamScoredPlayerNames,
+    getRankingDataFrom: (teamInMatch) => teamInMatch.teamAssistancePlayerNames,
   });
 
-export const generatePlayersScoresRankingTable = async () =>
+export const generatePlayersAssistsRankingTable = async () =>
   await generatePlayersRankingTable({
     getRankingResult: getSortedRankingData,
-    rankingPointsHeader: "进球数",
-    outputTemplateSuffix: "scores",
+    rankingPointsHeader: "助攻数",
+    outputTemplateSuffix: "assists",
   });
