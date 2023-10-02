@@ -1,6 +1,6 @@
 import { parse } from "csv-parse";
 import fs from "fs";
-import { Match, MatchGroupStage } from "./tournament.type";
+import { Match, MatchGroupStage, TeamInMatch } from "./tournament.type";
 import { finished } from "stream/promises";
 import path from "path";
 import { CommaDelimiter } from "./file-reader-utils";
@@ -106,6 +106,31 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
     ],
   };
 };
+
+const checkTeamInMatchAndThrowIfInvalid = (team: TeamInMatch, matchId: string) => {
+  if (team.scored !== team.teamScoredPlayerNames.length) {
+    throw new Error(
+      `Match: ${matchId} have team ${team.name} scored: ${
+        team.scored
+      } but have on-matched scored players: ${team.teamScoredPlayerNames.join(", ")}`
+    );
+  }
+};
+
+const checkMatchesAndThrowIfInvalid = (matches: Match[]) => {
+  matches.forEach((match) => {
+    if (!match.isEnded) {
+      return;
+    }
+
+    const team1 = match.teams[0];
+    const team2 = match.teams[1];
+
+    checkTeamInMatchAndThrowIfInvalid(team1, match.matchId);
+    checkTeamInMatchAndThrowIfInvalid(team2, match.matchId);
+  });
+};
+
 export const getAllMatches = async (): Promise<Match[]> => {
   const matches: RawMatch[] = [];
 
@@ -126,5 +151,9 @@ export const getAllMatches = async (): Promise<Match[]> => {
 
   await finished(parser);
 
-  return matches.map(mapRawMatchToMatch);
+  const mappedMatches = matches.map(mapRawMatchToMatch);
+
+  checkMatchesAndThrowIfInvalid(mappedMatches);
+
+  return mappedMatches;
 };

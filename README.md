@@ -9,10 +9,18 @@
    - `generate-group-tables [--gid A]`
 7. cleanup: `sudo npm rm -g [symlink-name]` (symlink-name does not contain the version)
 
+#### Rules
+
+##### Matches.csv
+
+- Only matches with both filled in team1 scores & team2 scores are considered as `ended` game.
+- Players with named with `*`, will not be considered in any ranking tables.
+  - Example: `Alex*` (will not appear in the scores ranking table)
+
 #### TODO
 
 1. match check
-   1. 进球数 match 进球人数 (校验所有人员)
+   1. ~~进球数 match 进球人数 (校验所有人员)~~
    1. 如何处理自由球员? (生成数据表的时候 移除出数据?)
 2. ~~助攻榜~~ / 红黄牌榜
    1. ~~common ranking-service~~

@@ -5,7 +5,10 @@ interface PlayerRanking {
   playerName: string;
   teamName: string;
   rankingPoints: number;
+  shouldBeIgnored: boolean;
 }
+
+const shouldIgnorePlayer = (playerName: string) => playerName.endsWith("*");
 
 const sortByRankingPoints = (r1: PlayerRanking, r2: PlayerRanking) =>
   r2.rankingPoints - r1.rankingPoints;
@@ -73,6 +76,7 @@ const updatePlayersRankingRecord = (
         playerName,
         teamName,
         rankingPoints: 1,
+        shouldBeIgnored: shouldIgnorePlayer(playerName),
       };
     }
   });
@@ -122,7 +126,11 @@ export const getPlayersRankingData = ({
 }: GetPlayersRankingDataParams): RankingResult[] => {
   const playersRankingRecord = getPlayersRankingsRecord(matches, getRankingDataFrom);
 
-  return getRankings(Object.values(playersRankingRecord)).map((item) => ({
+  const filteredPlayersRankingRecord = Object.values(playersRankingRecord).filter(
+    (v) => !v.shouldBeIgnored
+  );
+
+  return getRankings(filteredPlayersRankingRecord).map((item) => ({
     ...item.data,
     ranking: item.ranking,
   }));
