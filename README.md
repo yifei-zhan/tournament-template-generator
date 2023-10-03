@@ -19,14 +19,14 @@
 
 #### TODO
 
-1. match check
+1. ~~match check~~
    1. ~~进球数 match 进球人数 (校验所有人员)~~
-   1. 如何处理自由球员? (生成数据表的时候 移除出数据?)
-2. ~~助攻榜~~ / 红黄牌榜
+   1. ~~如何处理自由球员? (生成数据表的时候 移除出数据?)~~
+2. ~~助攻榜~~ / ~~红黄牌榜~~
    1. ~~common ranking-service~~
    2. ~~common ranking-generator~~
    3. ~~common ranking-template~~
-   4. 助攻数 自由球员不同球队?
+   4. ~~助攻数 自由球员不同球队?~~
 3. 完赛结果
 4. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
 5. application as a service(go cloud?)

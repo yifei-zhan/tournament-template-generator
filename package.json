@@ -9,8 +9,7 @@
   "bin": {
     "generate-all": "./build/bin/generate-all.js",
     "generate-group-tables": "./build/bin/generate-group-tables.js",
-    "generate-scores-rankings-table": "./build/bin/generate-scores-ranking-table.js",
-    "generate-assists-rankings-table": "./build/bin/generate-assists-ranking-table.js"
+    "generate-scores-rankings-table": "./build/bin/generate-scores-ranking-table.js"
   },
   "scripts": {
     "lint": "tsc --project tsconfig.json --noEmit && eslint . --ext=ts --max-warnings=0",
