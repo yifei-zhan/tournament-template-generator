@@ -112,7 +112,7 @@ const checkTeamInMatchAndThrowIfInvalid = (team: TeamInMatch, matchId: string) =
     throw new Error(
       `Match: ${matchId} have team ${team.name} scored: ${
         team.scored
-      } but have on-matched scored players: ${team.teamScoredPlayerNames.join(", ")}`
+      } but have non-matching scored players: ${team.teamScoredPlayerNames.join(", ")}`
     );
   }
 };
