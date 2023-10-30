@@ -35,3 +35,5 @@
      - 如何处理报错信息?
      - 测试
    - 队员号码 id(low prior)
+7. windows 下的 斜线问题
+8. build 后的 node_modules 问题
