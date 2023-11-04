@@ -9,7 +9,7 @@ assert(folders);
 assert(folders.length > 0);
 
 folders.forEach((folder) => {
-  const buildPath = path.join(__dirname, "build", folder);
+  const buildPath = path.join(__dirname, "dist", folder);
 
   fs.access(buildPath, fs.constants.F_OK, (err) => {
     if (err) {
