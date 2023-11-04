@@ -94,7 +94,7 @@ export async function generateGroupStageTables(params?: GenerateParams) {
   const [matches, teams, template] = await Promise.all([
     getAllMatches(),
     getAllTeams(),
-    readFile(path.join(__dirname, `../../input/${templateFileName}`), { encoding: "utf8" }),
+    readFile(path.join(__dirname, `../../templates/${templateFileName}`), { encoding: "utf8" }),
   ]);
 
   const groupIds = !!groupId ? [groupId] : getAllGroupIds(teams);

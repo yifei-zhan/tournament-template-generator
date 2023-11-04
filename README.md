@@ -1,3 +1,21 @@
+#### How to Run
+
+##### build the image
+
+1. install docker
+2. `docker build . -t tournament:1.0.0`
+
+##### update input and rerun following command to generate latest output
+
+1. `docker rm -f tournament_container || true && docker run -v ./input:/usr/src/dist/input --name tournament_container tournament:1.0.0`
+
+   > 1. try to remove exsiting old container if exists
+   > 2. when running new container, using volume to reflect current host input to docker container input folder
+
+2. `docker cp tournament_container:/usr/src/dist/output .`
+
+   > All files from docker container output will be (over)written to host:output in current directory
+
 #### Rules
 
 ##### Matches.csv
@@ -24,5 +42,3 @@
      - 如何处理报错信息?
      - 测试
    - 队员号码 id(low prior)
-7. windows 下的 斜线问题
-8. build 后的 node_modules 问题

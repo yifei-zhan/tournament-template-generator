@@ -10,8 +10,8 @@
     "lint": "tsc --project tsconfig.json --noEmit && eslint . --ext=ts --max-warnings=0",
     "start": "ts-node --project tsconfig.json index.ts",
     "build": "tsc --project tsconfig.prod.json && npm run ensure-build-folders-existence && npm run copy-files-to-build",
-    "ensure-build-folders-existence": "node ensure-build-folders-existence input",
-    "copy-files-to-build": "node copy-to-build.js ./input/*.csv && node copy-to-build.js ./input/*.html",
+    "ensure-build-folders-existence": "node ensure-build-folders-existence input && node ensure-build-folders-existence templates",
+    "copy-files-to-build": "node copy-to-build.js ./input/*.csv && node copy-to-build.js ./templates/*.html",
     "prepare": "husky install"
   },
   "repository": {

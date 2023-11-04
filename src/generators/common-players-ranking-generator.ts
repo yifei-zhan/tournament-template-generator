@@ -33,7 +33,7 @@ export async function generatePlayersRankingTable({
 }: GeneratePlayersRankingTableParams) {
   const [matches, originalTemplate] = await Promise.all([
     getAllMatches(),
-    readFile(path.join(__dirname, `../../input/${htmlFileName}.html`), { encoding: "utf8" }),
+    readFile(path.join(__dirname, `../../templates/${htmlFileName}.html`), { encoding: "utf8" }),
   ]);
 
   const template = replaceOne(
