@@ -11,7 +11,7 @@
 5. run following command to pull image
 
    ```bash
-   $ docker image pull zhanyifei/tournament:1.0.0
+   $ docker image pull zhanyifei/tournament
    ```
 
 ##### Then update input and rerun following command to generate latest output
@@ -19,7 +19,7 @@
 ```bash
 # 1. try to remove exsiting old container if exists
 # 2. when running new container, using volume to reflect current host input to docker container input folder
-$ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input --name tournament_container zhanyifei/tournament:1.0.0
+$ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input --name tournament_container zhanyifei/tournament
 
 # All files from docker container output will be (over)written to host:output in current directory
 $ docker cp tournament_container:/usr/src/dist/output .
