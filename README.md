@@ -49,9 +49,8 @@ $ docker push [username]/[repository]:[tag-name]
 
 1. 完赛结果
 2. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
-3. application as a service(go cloud?)
-4. 其他优化
-   - node -> exec 文件: https://github.com/nexe/nexe?
-     - 如何处理报错信息?
-     - 测试
-   - 队员号码 id(low prior)
+3. 其他优化
+
+- 队员号码 id(low prior)
+  - 如何处理报错信息?
+  - 测试
