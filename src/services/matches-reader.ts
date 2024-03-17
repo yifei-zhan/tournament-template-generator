@@ -1,6 +1,6 @@
 import { parse } from "csv-parse";
 import fs from "fs";
-import { Match, MatchGroupStage, TeamInMatch } from "./tournament.type";
+import { KnockoutStage, Match, MatchGroupStage, TeamInMatch } from "./tournament.type";
 import { finished } from "stream/promises";
 import path from "path";
 import { CommaDelimiter } from "./file-reader-utils";
@@ -11,6 +11,9 @@ interface RawMatch {
   fieldLabel: string;
   groupLabel: string;
   roundLabel: string;
+
+  knockoutBracketLabel: string;
+  knockoutStageLabel: string;
 
   team1Name: string;
   team1Scored: string;
@@ -33,8 +36,12 @@ const headersRecordInOrder: Record<keyof RawMatch, undefined> = {
   matchId: undefined,
   matchTime: undefined,
   fieldLabel: undefined,
+
   groupLabel: undefined,
   roundLabel: undefined,
+
+  knockoutBracketLabel: undefined,
+  knockoutStageLabel: undefined,
 
   team1Name: undefined,
   team2Name: undefined,
@@ -67,12 +74,24 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
     ? {
         groupId: rawMatch.groupLabel,
         groupLabel: rawMatch.groupLabel,
+        groupKey: rawMatch.groupLabel,
       }
     : undefined;
+  const knockoutStage: KnockoutStage | undefined =
+    rawMatch.knockoutBracketLabel && rawMatch.knockoutStageLabel
+      ? {
+          knockoutBracketId: rawMatch.knockoutBracketLabel,
+          knockoutBracketLabel: rawMatch.knockoutBracketLabel,
+
+          knockoutStageKey: rawMatch.knockoutStageLabel,
+          knockoutStageLabel: rawMatch.knockoutStageLabel,
+        }
+      : undefined;
   const isEnded = rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "";
 
   return {
     groupStage,
+    knockoutStage,
     matchId: rawMatch.matchId,
     matchTime: rawMatch.matchTime,
     fieldLabel: rawMatch.fieldLabel,

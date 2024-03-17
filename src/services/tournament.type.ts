@@ -24,11 +24,22 @@ export interface TeamInMatch {
 
 export interface MatchGroupStage {
   groupId: string;
+
   groupLabel: string;
+  groupKey: string;
+}
+
+export interface KnockoutStage {
+  knockoutBracketLabel: string;
+  knockoutBracketId: string;
+
+  knockoutStageLabel: string;
+  knockoutStageKey: string;
 }
 
 export interface Match {
   groupStage?: MatchGroupStage;
+  knockoutStage?: KnockoutStage;
   isEnded: boolean;
 
   matchId: string;
