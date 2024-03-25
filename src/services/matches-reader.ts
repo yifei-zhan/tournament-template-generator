@@ -12,8 +12,8 @@ interface RawMatch {
   groupLabel: string;
   roundLabel: string;
 
-  knockoutBracketLabel: string;
-  knockoutStageLabel: string;
+  knockoutLabel: string;
+  knockoutRoundLabel: string;
 
   team1Name: string;
   team1Scored: string;
@@ -40,8 +40,8 @@ const headersRecordInOrder: Record<keyof RawMatch, undefined> = {
   groupLabel: undefined,
   roundLabel: undefined,
 
-  knockoutBracketLabel: undefined,
-  knockoutStageLabel: undefined,
+  knockoutLabel: undefined,
+  knockoutRoundLabel: undefined,
 
   team1Name: undefined,
   team2Name: undefined,
@@ -70,21 +70,24 @@ const mapCommaDelimiterStrToArr = (raw: string): string[] => {
 };
 
 const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
-  const groupStage: MatchGroupStage | undefined = rawMatch.groupLabel
-    ? {
-        groupId: rawMatch.groupLabel,
-        groupLabel: rawMatch.groupLabel,
-        groupKey: rawMatch.groupLabel,
-      }
-    : undefined;
-  const knockoutStage: KnockoutStage | undefined =
-    rawMatch.knockoutBracketLabel && rawMatch.knockoutStageLabel
+  const groupStage: MatchGroupStage | undefined =
+    rawMatch.groupLabel && rawMatch.roundLabel
       ? {
-          knockoutBracketId: rawMatch.knockoutBracketLabel,
-          knockoutBracketLabel: rawMatch.knockoutBracketLabel,
+          groupId: rawMatch.groupLabel,
+          groupLabel: rawMatch.groupLabel,
 
-          knockoutStageKey: rawMatch.knockoutStageLabel,
-          knockoutStageLabel: rawMatch.knockoutStageLabel,
+          roundKey: rawMatch.roundLabel,
+          roundLabel: rawMatch.roundLabel,
+        }
+      : undefined;
+  const knockoutStage: KnockoutStage | undefined =
+    rawMatch.knockoutLabel && rawMatch.knockoutRoundLabel
+      ? {
+          id: rawMatch.knockoutLabel,
+          label: rawMatch.knockoutLabel,
+
+          roundKey: rawMatch.knockoutRoundLabel,
+          roundLabel: rawMatch.knockoutRoundLabel,
         }
       : undefined;
   const isEnded = rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "";
@@ -100,7 +103,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
     teams: [
       {
         name: rawMatch.team1Name,
-        scored: Number(rawMatch.team1Scored),
+        scored: rawMatch.team1Scored !== "" ? Number(rawMatch.team1Scored) : undefined,
         penaltyScored:
           rawMatch.team1PenaltyScored !== "" ? Number(rawMatch.team1PenaltyScored) : undefined,
         teamScoredPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team1ScoredPlayersNames),
@@ -112,7 +115,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
       },
       {
         name: rawMatch.team2Name,
-        scored: Number(rawMatch.team2Scored),
+        scored: rawMatch.team2Scored !== "" ? Number(rawMatch.team2Scored) : undefined,
         penaltyScored:
           rawMatch.team2PenaltyScored !== "" ? Number(rawMatch.team2PenaltyScored) : undefined,
         teamScoredPlayerNames: mapCommaDelimiterStrToArr(rawMatch.team2ScoredPlayersNames),

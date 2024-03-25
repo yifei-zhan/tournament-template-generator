@@ -13,7 +13,7 @@ export interface Team {
 
 export interface TeamInMatch {
   name: string;
-  scored: number;
+  scored?: number;
 
   penaltyScored?: number;
   teamScoredPlayerNames: string[];
@@ -24,17 +24,18 @@ export interface TeamInMatch {
 
 export interface MatchGroupStage {
   groupId: string;
-
   groupLabel: string;
-  groupKey: string;
+
+  roundLabel: string;
+  roundKey: string;
 }
 
 export interface KnockoutStage {
-  knockoutBracketLabel: string;
-  knockoutBracketId: string;
+  label: string;
+  id: string;
 
-  knockoutStageLabel: string;
-  knockoutStageKey: string;
+  roundLabel: string;
+  roundKey: string;
 }
 
 export interface Match {

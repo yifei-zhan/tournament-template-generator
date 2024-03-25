@@ -6,4 +6,5 @@ output
 .DS_Store
 *.tsbuildinfo
 
+temp.html
 *.temp.html

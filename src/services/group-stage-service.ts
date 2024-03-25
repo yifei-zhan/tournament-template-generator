@@ -27,8 +27,10 @@ interface TeamData {
   wonAgainstTeamNames: string[];
 }
 
+const getScore = (score: number | undefined): number => score ?? 0;
+
 interface TeamHasScores {
-  scored: number;
+  scored?: number;
   penaltyScored?: number;
 }
 const getCurrentTeamMatchResult = ({
@@ -38,8 +40,8 @@ const getCurrentTeamMatchResult = ({
   currentTeam: TeamHasScores;
   opponentTeam: TeamHasScores;
 }): "won" | "lost" | "draw" => {
-  const currentTeamScored = currentTeam.scored + (currentTeam.penaltyScored || 0);
-  const opponentTeamScored = opponentTeam.scored + (opponentTeam.penaltyScored || 0);
+  const currentTeamScored = getScore(currentTeam.scored) + getScore(currentTeam.penaltyScored);
+  const opponentTeamScored = getScore(opponentTeam.scored) + getScore(opponentTeam.penaltyScored);
 
   if (currentTeamScored === opponentTeamScored) {
     return "draw";
@@ -87,8 +89,8 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
       }
     }
 
-    goalsScored += currentTeamInMatch.scored;
-    goalsAgainst += opponentTeamInMatch.scored;
+    goalsScored += getScore(currentTeamInMatch.scored);
+    goalsAgainst += getScore(opponentTeamInMatch.scored);
   }
 
   return {
