@@ -1,0 +1,13 @@
+FROM node:18-bullseye as build
+
+WORKDIR /usr/src
+
+ONBUILD COPY package*.json .eslintrc.json ./
+
+ONBUILD RUN npm ci --ignore-scripts
+
+ONBUILD COPY . .
+
+ONBUILD RUN npm run build
+
+ONBUILD RUN npm prune --omit=dev

@@ -6,6 +6,7 @@ import { generatePlayersRedCardsRankingTable } from "./src/generators/red-cards-
 import { generatePlayersScoresRankingTable } from "./src/generators/scores-ranking-generator";
 import { generatePlayersYellowCardsRankingTable } from "./src/generators/yellow-cards-ranking-generator";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function run() {
   await Promise.all([
     generateGroupStageTables(),
@@ -21,3 +22,8 @@ async function run() {
 }
 
 run();
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+export const handler = async (event: any, context: any) => {
+  return "Hello World!";
+};

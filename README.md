@@ -1,4 +1,4 @@
-#### - For tournament organiser
+## Use App via Docker
 
 1. install docker
 
@@ -25,27 +25,44 @@ $ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input
 $ docker cp tournament_container:/usr/src/dist/output .
 ```
 
-#### - Proposed running process
+## Use App via AWS Lambda
+
+... TODO
+
+## Proposed running process
 
 ```bash
-# build image
-$ docker build . -t [image-name]:[tag-name]
+# build base image
+$ docker build . -t tournament-base -f Dockerfile.base
+```
 
+Push to Dockerhub
+
+```bash
+$ docker build . -t [image-name]:[tag-name]
 # push image to docker-hub
 $ docker login
 $ docker tag [image-name]:[tag-name] [username]/[repository]:[tag-name]
 $ docker push [username]/[repository]:[tag-name]
 ```
 
-#### - Rules
+Push to AWS
+
+```bash
+$ docker build . -t [image-name]:[tag-name] -f Dockerfile.aws
+# ... todo
+```
+
+## Rules
 
 ##### Matches.csv
 
 - Only matches with both filled in team1 scores & team2 scores are considered as `ended` game.
 - Players with named with `*`, will not be considered in any ranking tables.
   - Example: `Alex*` (will not appear in the scores ranking table)
+- Either `分组` && `轮次` or `淘汰赛分区` && `淘汰赛轮次` should be filled
 
-#### - TODO
+## TODO
 
 1. 完赛结果
 2. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
