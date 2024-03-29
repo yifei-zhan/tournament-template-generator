@@ -2,16 +2,26 @@ import { getAllMatches } from "../services/matches-reader";
 import { getAllTeams } from "../services/teams-reader";
 import { readFile } from "fs/promises";
 import path from "path";
-import { extractStrBetween, insertAfter, replaceBetween, replaceOne } from "../utils/utils";
+import {
+  appendTo,
+  extractStrBetween,
+  insertAfter,
+  replaceBetween,
+  replaceOne,
+} from "../utils/utils";
 import { createHtml } from "../services/template-service";
 import { Match, Team } from "../services/tournament.type";
 import { getMatchlistGroups } from "../services/match-list-service";
 
 const templateFileName = "match-list.html";
-const matchListStart = "<!-- %%dynamic-match-items-start%% -->";
 
-const matchBlockStart = "%%match-start%%";
-const matchBlockEnd = "%%match-end%%";
+const dynamicMatchListsStart = "<!-- %%dynamic-match-lists-start%% -->";
+const templateMatchListStart = "<!-- %%match-list-start%%";
+const templateMatchListEnd = "%%match-list-end%% -->";
+
+const dynamicMatchesStart = "<!- - %%dynamic-matches-start%% - ->";
+const templateMatchBlockStart = "<!- - %%match-start%% - ->";
+const templateMatchBlockEnd = "<!- - %%match-end%% - ->";
 
 const roundLabel = "%%round-label%%";
 
@@ -63,55 +73,69 @@ interface Params {
 }
 
 const generate = async ({ matches, teams, template, isKnockoutStage }: Params) => {
+  let matchListTemplate = extractStrBetween(template, templateMatchListStart, templateMatchListEnd);
+  matchListTemplate = replaceBetween({
+    str: matchListTemplate,
+    start: templateMatchBlockStart,
+    end: templateMatchBlockEnd,
+    replaceTo: "",
+  });
+  const matchTemplate = extractStrBetween(template, templateMatchBlockStart, templateMatchBlockEnd);
+
   const matchGroups = getMatchlistGroups({
     matches,
     teams,
     isKnockoutStage,
   });
 
-  const matchesTemplate = matchGroups
-    .map((matchGroup) => {
-      let matchItem = "";
+  let matchLists = "";
 
-      matchGroup.matches.forEach((match) => {
-        matchItem = extractStrBetween(template, matchBlockStart, matchBlockEnd);
-        matchItem = replaceOne(matchItem, roundLabel, matchGroup.label);
+  matchGroups.forEach((matchGroup) => {
+    let matchList = matchListTemplate;
+    matchList = replaceOne(matchList, roundLabel, matchGroup.label);
 
-        matchItem = replaceOne(matchItem, matchInfo, match.matchInfo);
+    let matchItems = "";
+    matchGroup.matches.forEach((match) => {
+      let matchItem = matchTemplate;
 
-        matchItem = replaceImage(
-          matchItem,
-          team1ImageStart,
-          team1ImageEnd,
-          team1ImageSrc,
-          match.team1ImageSrc
-        );
-        matchItem = replaceOne(matchItem, team1Name, match.team1Name);
-        matchItem = replaceOne(matchItem, team1Score, match.team1ScoreStr ?? "");
-        matchItem = replaceOne(matchItem, isTeam1Winner, match.winner === "team1" ? "winner" : "");
+      matchItem = replaceOne(matchItem, matchInfo, match.matchInfo);
 
-        matchItem = replaceImage(
-          matchItem,
-          team2ImageStart,
-          team2ImageEnd,
-          team2ImageSrc,
-          match.team2ImageSrc
-        );
-        matchItem = replaceOne(matchItem, team2Name, match.team2Name);
-        matchItem = replaceOne(matchItem, team2Score, match.team2ScoreStr ?? "");
-        matchItem = replaceOne(matchItem, isTeam2Winner, match.winner === "team2" ? "winner" : "");
-      });
+      matchItem = replaceImage(
+        matchItem,
+        team1ImageStart,
+        team1ImageEnd,
+        team1ImageSrc,
+        match.team1ImageSrc
+      );
+      matchItem = replaceOne(matchItem, team1Name, match.team1Name);
+      matchItem = replaceOne(matchItem, team1Score, match.team1ScoreStr ?? "");
+      matchItem = replaceOne(matchItem, isTeam1Winner, match.winner === "team1" ? "winner" : "");
 
-      return matchItem;
-    })
-    .join("\n");
+      matchItem = replaceImage(
+        matchItem,
+        team2ImageStart,
+        team2ImageEnd,
+        team2ImageSrc,
+        match.team2ImageSrc
+      );
+      matchItem = replaceOne(matchItem, team2Name, match.team2Name);
+      matchItem = replaceOne(matchItem, team2Score, match.team2ScoreStr ?? "");
+      matchItem = replaceOne(matchItem, isTeam2Winner, match.winner === "team2" ? "winner" : "");
+
+      matchItems = appendTo(matchItems, `\n${matchItem}\n`);
+    });
+
+    matchList = insertAfter(matchList, dynamicMatchesStart, matchItems);
+
+    matchLists = appendTo(matchLists, `\n${matchList}\n`);
+  });
 
   const outputFileName = isKnockoutStage
     ? "knockout-stage-match-list.html"
     : "group-stage-match-list.html";
-  const result = insertAfter(template, matchListStart, `\n${matchesTemplate}\n`);
 
-  await createHtml(result, outputFileName);
+  const modifiedTemplate = insertAfter(template, dynamicMatchListsStart, matchLists);
+  await createHtml(modifiedTemplate, outputFileName);
 };
 
 export async function generateMatchList(params?: { isKnockoutStage?: boolean }) {

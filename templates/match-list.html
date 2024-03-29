@@ -44,6 +44,8 @@
     }
 
     .match-item {
+      flex-grow: 1;
+
       display: flex;
       flex-direction: column;
       gap: 5px;
@@ -121,10 +123,11 @@
 
 <body>
   <div class="all-matches">
-    <!-- %%match-start%%
+    <!-- %%match-list-start%%
     <div class="match-list-container">
       <div class="match-list-header">%%round-label%%</div>
 
+      <!- - %%match-start%% - ->
       <div class="match-container">
         <div class="match-item">
           <div class="match-info">%%match-info%%</div>
@@ -151,7 +154,7 @@
                 <td>
                   <div class="match-team">
                     %%team2-image-start%%<img src="%%team2-image-src%%" alt="" />%%team2-image-end%%
-                    <div class="team-name">>%%team2-name%%</div>
+                    <div class="team-name">%%team2-name%%</div>
                   </div>
                   <div class="match-item-row-placeholder"></div>
                 </td>
@@ -160,8 +163,13 @@
           </table>
         </div>
       </div>
-    %%match-end%% -->
-    <!-- %%dynamic-match-items-start%% -->
+      <!- - %%match-end%% - ->
+
+      <!- - %%dynamic-matches-start%% - ->
+    </div>
+    %%match-list-end%% -->
+
+    <!-- %%dynamic-match-lists-start%% -->
   </div>
 
 </body>

@@ -34,7 +34,8 @@ export function replaceBetween({
   replaceTo,
   replaceSearchingTerm,
 }: ReplaceBetweenParams): string {
-  const regexStr = `(${start})(.+?)(${end})`;
+  // Comment: use [\s\S] instead of . to match any character including new line
+  const regexStr = `(${start})([\\s\\S]*?)(${end})`;
   const replace = replaceSearchingTerm ? replaceTo : `$1${replaceTo}$3`;
   return str.replace(new RegExp(regexStr), replace);
 }
@@ -49,6 +50,10 @@ export function insertAfter(str: string, match: string, strToBeAdded: string): s
   const strAfter = str.slice(startIndex + 1);
 
   return `${strBefore}${strToBeAdded}${strAfter}`;
+}
+
+export function appendTo(str: string, strToBeAdded: string): string {
+  return `${str}${strToBeAdded}`;
 }
 
 export const getStrAsciiSum = (str: string) =>
