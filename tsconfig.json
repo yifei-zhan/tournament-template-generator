@@ -1,14 +1,4 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "target": "ES2022"
-  },
-  "ts-node": {
-    "compilerOptions": {
-      "target": "ES2022",
-      "module": "NodeNext",
-      "moduleResolution": "NodeNext"
-    }
-  },
   "include": ["src", "index.ts"]
 }
