@@ -1,3 +1,9 @@
+## Test Locally
+
+```bash
+[MATCHES_FILE_NAME=""] [TEAMS_FILE_NAME=""] npm start
+```
+
 ## Use App via Docker
 
 1. install docker
@@ -17,9 +23,13 @@
 ##### Then update input and rerun following command to generate latest output
 
 ```bash
+# Explanation:
 # 1. try to remove exsiting old container if exists
 # 2. when running new container, using volume to reflect current host input to docker container input folder
-$ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input --name tournament_container zhanyifei/tournament
+$ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input [-e MATCHES_FILE_NAME=""] [-e TEAMS_FILE_NAME=""] --name tournament_container [IMAGE_NAME]
+
+# Example: run with default image from dockerhub with default file as inputs
+# docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input --name tournament_container zhanyifei/tournament
 
 # All files from docker container output will be (over)written to host:output in current directory
 $ docker cp tournament_container:/usr/src/dist/output .
@@ -29,7 +39,7 @@ $ docker cp tournament_container:/usr/src/dist/output .
 
 ... TODO
 
-## Proposed running process
+## Building & Publishing
 
 ```bash
 # build base image
@@ -64,9 +74,8 @@ $ docker build . -t [image-name]:[tag-name] -f Dockerfile.aws
 
 ## TODO
 
-1. 完赛结果
-2. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
-3. 其他优化
+1. integration test -> 优化 build 之后的流程。从统计员方 检查整个流程是否简便
+2. 其他优化
 
 - 队员号码 id(low prior)
   - 如何处理报错信息?

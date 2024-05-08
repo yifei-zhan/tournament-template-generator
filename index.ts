@@ -22,7 +22,11 @@ async function run() {
 
 run();
 
+// import { downloadFilesFromBucket, uploadFile } from "./src/aws/s3-buckets-service";
+// uploadFile();
+// downloadFilesFromBucket();
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 export const handler = async (event: any, context: any) => {
-  return "Hello World!";
+  return "AWS Lambda function executed successfully!";
 };

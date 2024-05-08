@@ -5,6 +5,8 @@ import { finished } from "stream/promises";
 import path from "path";
 import { CommaDelimiter } from "./file-reader-utils";
 
+const fileName = process.env["MATCHES_FILE_NAME"] ?? "matches.csv";
+
 interface RawMatch {
   matchId: string;
   matchTime: string;
@@ -156,7 +158,7 @@ const checkMatchesAndThrowIfInvalid = (matches: Match[]) => {
 export const getAllMatches = async (): Promise<Match[]> => {
   const matches: RawMatch[] = [];
 
-  const parser = fs.createReadStream(path.join(__dirname, "../../input/matches.csv")).pipe(
+  const parser = fs.createReadStream(path.join(__dirname, `../../input/${fileName}`)).pipe(
     parse({
       delimiter: CommaDelimiter,
       columns: [...headers],

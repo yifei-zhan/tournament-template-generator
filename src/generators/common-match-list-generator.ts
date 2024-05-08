@@ -109,7 +109,11 @@ const generate = async ({ matches, teams, template, isKnockoutStage }: Params) =
       );
       matchItem = replaceOne(matchItem, team1Name, match.team1Name);
       matchItem = replaceOne(matchItem, team1Score, match.team1ScoreStr ?? "");
-      matchItem = replaceOne(matchItem, isTeam1Winner, match.winner === "team1" ? "winner" : "");
+      matchItem = replaceOne(
+        matchItem,
+        isTeam1Winner,
+        match.winner === "team1" ? "match-winner" : ""
+      );
 
       matchItem = replaceImage(
         matchItem,
@@ -120,7 +124,11 @@ const generate = async ({ matches, teams, template, isKnockoutStage }: Params) =
       );
       matchItem = replaceOne(matchItem, team2Name, match.team2Name);
       matchItem = replaceOne(matchItem, team2Score, match.team2ScoreStr ?? "");
-      matchItem = replaceOne(matchItem, isTeam2Winner, match.winner === "team2" ? "winner" : "");
+      matchItem = replaceOne(
+        matchItem,
+        isTeam2Winner,
+        match.winner === "team2" ? "match-winner" : ""
+      );
 
       matchItems = appendTo(matchItems, `\n${matchItem}\n`);
     });

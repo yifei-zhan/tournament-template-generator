@@ -5,6 +5,8 @@ import { finished } from "stream/promises";
 import path from "path";
 import { CommaDelimiter } from "./file-reader-utils";
 
+const fileName = process.env["TEAMS_FILE_NAME"] ?? "teams.csv";
+
 interface RawTeam {
   name: string;
   shortLabel: string;
@@ -30,7 +32,7 @@ const mapRawTeamToTeam = (rawTeam: RawTeam): Team => ({
 export const getAllTeams = async (): Promise<Team[]> => {
   const teams: RawTeam[] = [];
 
-  const parser = fs.createReadStream(path.join(__dirname, "../../input/teams.csv")).pipe(
+  const parser = fs.createReadStream(path.join(__dirname, `../../input/${fileName}`)).pipe(
     parse({
       delimiter: CommaDelimiter,
       columns: [...headers],
