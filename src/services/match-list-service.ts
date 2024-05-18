@@ -134,7 +134,7 @@ const getKnockoutStageMatchGroups = (matches: Match[], teams: Team[]): MatchGrou
         const roundLabel = ensureDefined(match.knockoutStage).roundLabel;
         const defaultInfo = getDefaultMatchInfo(match);
 
-        return defaultInfo !== "" ? `${roundLabel} - ${defaultInfo}` : roundLabel;
+        return defaultInfo !== "" ? `${roundLabel} ${defaultInfo}` : roundLabel;
       }
     );
   });
@@ -148,10 +148,21 @@ const getGroupStageMatchGroups = (matches: Match[], teams: Team[]): MatchGroup[]
   matches.forEach((match) => {
     const groupStage = ensureDefined(match.groupStage);
 
-    extendMatchGroups(matchGroups, match, teams, {
-      groupKey: groupStage.groupId,
-      groupLabel: groupStage.groupLabel,
-    });
+    extendMatchGroups(
+      matchGroups,
+      match,
+      teams,
+      {
+        groupKey: groupStage.groupId,
+        groupLabel: groupStage.groupLabel,
+      },
+      (match) => {
+        const roundLabel = ensureDefined(match.groupStage).roundLabel;
+        const defaultInfo = getDefaultMatchInfo(match);
+
+        return defaultInfo !== "" ? `${roundLabel} ${defaultInfo}` : roundLabel;
+      }
+    );
   });
 
   return matchGroups;
@@ -171,8 +182,9 @@ export const getMatchlistGroups = ({
   const filteredMatches = matches.filter((match) =>
     isKnockoutStage ? match.knockoutStage !== undefined : match.groupStage !== undefined
   );
+  const reversedMatches = [...filteredMatches].reverse();
 
   return isKnockoutStage
-    ? getKnockoutStageMatchGroups(filteredMatches, teams)
-    : getGroupStageMatchGroups(filteredMatches, teams);
+    ? getKnockoutStageMatchGroups(reversedMatches, teams)
+    : getGroupStageMatchGroups(reversedMatches, teams);
 };
