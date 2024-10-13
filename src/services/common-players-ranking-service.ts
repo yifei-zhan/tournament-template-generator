@@ -1,11 +1,10 @@
 import { ensureDefined, getStrAsciiSum, sort } from "../utils/utils";
-import { Match, TeamInMatch } from "./tournament.type";
+import { Match, Player, TeamInMatch } from "./tournament.type";
 
 interface PlayerRanking {
   playerName: string;
   teamName: string;
   rankingPoints: number;
-  shouldBeIgnored: boolean;
 }
 
 const shouldIgnorePlayer = (playerName: string) => playerName.endsWith("*");
@@ -16,7 +15,11 @@ const sortByTeamName = (r1: PlayerRanking, r2: PlayerRanking) =>
   getStrAsciiSum(r2.teamName) - getStrAsciiSum(r1.teamName);
 const rankingDataComparers = [sortByRankingPoints, sortByTeamName];
 
-const getRankings = (items: PlayerRanking[]): Array<{ ranking: number; data: PlayerRanking }> => {
+const getRankings = (
+  rankings: Record<string, PlayerRanking>
+): Array<{ ranking: number; data: PlayerRanking }> => {
+  const items = Object.values(rankings);
+
   if (items.length === 0) {
     return [];
   }
@@ -59,24 +62,84 @@ const getRankings = (items: PlayerRanking[]): Array<{ ranking: number; data: Pla
   return result;
 };
 
-const getKeyName = (playerName: string, teamName: string) => playerName + "/" + teamName;
+interface GetKeyNameAndLogIfBadDataQualityParams {
+  matchId: string;
+  playerNameInMatch: string;
+  teamNameInMatch: string;
+  playersData: Player[] | undefined;
+}
 
-const updatePlayersRankingRecord = (
-  playerNames: string[],
-  teamName: string,
-  playersRankingRecord: Record<string, PlayerRanking>
-) => {
+const getRankingKeyAndTeamNameAndLogIfBadQuality = ({
+  matchId,
+  playerNameInMatch,
+  teamNameInMatch,
+  playersData,
+}: GetKeyNameAndLogIfBadDataQualityParams): {
+  key: string;
+  resolvedTeamName: string;
+} => {
+  if (playersData === undefined) {
+    return {
+      key: playerNameInMatch + "/" + teamNameInMatch,
+      resolvedTeamName: teamNameInMatch,
+    };
+  }
+
+  const playerDataFromCatalog = playersData.filter((player) => player.name === playerNameInMatch);
+  if (playerDataFromCatalog.length !== 1) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Player-${playerNameInMatch} from team-${teamNameInMatch} in match-${matchId}: not found in players data catalog or multiple players found (bad data quality)`
+    );
+    return {
+      key: playerNameInMatch + "/" + teamNameInMatch,
+      resolvedTeamName: teamNameInMatch,
+    };
+  }
+
+  const player = ensureDefined(playerDataFromCatalog[0]);
+  return {
+    key: player.name + "/" + player.teamName,
+    resolvedTeamName: player.teamName,
+  };
+};
+
+interface UpdatePlayersRankingRecordParams {
+  matchId: string;
+  playerNames: string[];
+  teamName: string;
+  playersData: Player[] | undefined;
+  playersRankingRecord: Record<string, PlayerRanking>;
+}
+
+const updatePlayersRankingRecord = ({
+  matchId,
+  playerNames,
+  teamName,
+  playersData,
+  playersRankingRecord,
+}: UpdatePlayersRankingRecordParams) => {
   playerNames.forEach((playerName) => {
-    const key = getKeyName(playerName, teamName);
+    const shouldIgnore = shouldIgnorePlayer(playerName);
+    if (shouldIgnore) {
+      return;
+    }
+
+    const { key, resolvedTeamName } = getRankingKeyAndTeamNameAndLogIfBadQuality({
+      matchId,
+      playerNameInMatch: playerName,
+      teamNameInMatch: teamName,
+      playersData,
+    });
+
     if (playersRankingRecord[key]) {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       (playersRankingRecord[key] as PlayerRanking).rankingPoints += 1;
     } else {
       playersRankingRecord[key] = {
         playerName,
-        teamName,
+        teamName: resolvedTeamName,
         rankingPoints: 1,
-        shouldBeIgnored: shouldIgnorePlayer(playerName),
       };
     }
   });
@@ -84,6 +147,7 @@ const updatePlayersRankingRecord = (
 
 const getPlayersRankingsRecord = (
   matches: Match[],
+  players: Player[] | undefined,
   getRankingDataFrom: GetRankingArray
 ): Record<string, PlayerRanking> => {
   const playersRankingRecord: Record<string, PlayerRanking> = {};
@@ -92,14 +156,26 @@ const getPlayersRankingsRecord = (
     const team1 = match.teams[0];
     const team2 = match.teams[1];
 
-    const team1RankingData = getRankingDataFrom(team1);
-    if (team1RankingData.length > 0) {
-      updatePlayersRankingRecord(team1RankingData, team1.name, playersRankingRecord);
+    const team1PlayersForRanking = getRankingDataFrom(team1);
+    if (team1PlayersForRanking.length > 0) {
+      updatePlayersRankingRecord({
+        matchId: match.matchId,
+        playerNames: team1PlayersForRanking,
+        teamName: team1.name,
+        playersData: players,
+        playersRankingRecord,
+      });
     }
 
-    const team2RankingData = getRankingDataFrom(team2);
-    if (team2RankingData.length > 0) {
-      updatePlayersRankingRecord(team2RankingData, team2.name, playersRankingRecord);
+    const team2PlayersForRanking = getRankingDataFrom(team2);
+    if (team2PlayersForRanking.length > 0) {
+      updatePlayersRankingRecord({
+        matchId: match.matchId,
+        playerNames: team2PlayersForRanking,
+        teamName: team2.name,
+        playersData: players,
+        playersRankingRecord,
+      });
     }
   });
 
@@ -117,20 +193,18 @@ type GetRankingArray = (teamInMatch: TeamInMatch) => string[];
 
 interface GetPlayersRankingDataParams {
   matches: Match[];
+  players: Player[] | undefined;
   getRankingDataFrom: GetRankingArray;
 }
 
 export const getPlayersRankingData = ({
   matches,
+  players,
   getRankingDataFrom,
 }: GetPlayersRankingDataParams): RankingResult[] => {
-  const playersRankingRecord = getPlayersRankingsRecord(matches, getRankingDataFrom);
+  const playersRankingRecord = getPlayersRankingsRecord(matches, players, getRankingDataFrom);
 
-  const filteredPlayersRankingRecord = Object.values(playersRankingRecord).filter(
-    (v) => !v.shouldBeIgnored
-  );
-
-  return getRankings(filteredPlayersRankingRecord).map((item) => ({
+  return getRankings(playersRankingRecord).map((item) => ({
     ...item.data,
     ranking: item.ranking,
   }));

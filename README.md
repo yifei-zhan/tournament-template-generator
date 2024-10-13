@@ -26,7 +26,7 @@
 # Explanation:
 # 1. try to remove exsiting old container if exists
 # 2. when running new container, using volume to reflect current host input to docker container input folder
-$ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input [-e MATCHES_FILE_NAME=""] [-e TEAMS_FILE_NAME=""] --name tournament_container [IMAGE_NAME]
+$ docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input [-e MATCHES_FILE_NAME=""] [-e TEAMS_FILE_NAME=""] [-e PLAYERS_FILE_NAME=""] --name tournament_container [IMAGE_NAME]
 
 # Example: run with default image from dockerhub with default file as inputs
 # docker rm -f tournament_container 2>/dev/null || true && docker run -v ./input:/usr/src/dist/input --name tournament_container zhanyifei/tournament
@@ -65,12 +65,16 @@ $ docker build . -t [image-name]:[tag-name] -f Dockerfile.aws
 
 ## Rules
 
-##### Matches.csv
+##### matches.csv
 
 - Only matches with both filled in team1 scores & team2 scores are considered as `ended` game.
 - Players with named with `*`, will not be considered in any ranking tables.
   - Example: `Alex*` (will not appear in the scores ranking table)
 - Either `分组` && `轮次` or `淘汰赛分区` && `淘汰赛轮次` should be filled
+
+**players.csv**
+
+[optional] player data are provided(playerName -> teamName mapping) to provide a more accurate & better rendering of ranking tables
 
 ## TODO
 

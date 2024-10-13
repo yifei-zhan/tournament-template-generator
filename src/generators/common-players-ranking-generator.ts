@@ -3,8 +3,9 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { extractStrBetween, insertAfter, replaceOne } from "../utils/utils";
 import { createHtml } from "../services/template-service";
-import { Match } from "../services/tournament.type";
+import { Match, Player } from "../services/tournament.type";
 import { RankingResult } from "../services/common-players-ranking-service";
+import { tryGetPlayers } from "../services/players-reader";
 
 const htmlFileName = "players-ranking-table";
 
@@ -21,7 +22,7 @@ const rankingPointsCount = "%%ranking-points-count%%";
 const rankingPointsHeaderPlaceholder = "%%ranking-points-header%%";
 
 interface GeneratePlayersRankingTableParams {
-  getRankingResult: (matches: Match[]) => RankingResult[];
+  getRankingResult: (matches: Match[], players: Player[] | undefined) => RankingResult[];
   rankingPointsHeader: string;
   outputTemplateSuffix: string;
 }
@@ -31,8 +32,9 @@ export async function generatePlayersRankingTable({
   rankingPointsHeader,
   outputTemplateSuffix,
 }: GeneratePlayersRankingTableParams) {
-  const [matches, originalTemplate] = await Promise.all([
+  const [matches, players, originalTemplate] = await Promise.all([
     getAllMatches(),
+    tryGetPlayers(),
     readFile(path.join(__dirname, `../../templates/${htmlFileName}.html`), { encoding: "utf8" }),
   ]);
 
@@ -42,7 +44,7 @@ export async function generatePlayersRankingTable({
     rankingPointsHeader
   );
 
-  const rankings = getRankingResult(matches);
+  const rankings = getRankingResult(matches, players);
   const rows = rankings
     .map((rankingData) => {
       let row = extractStrBetween(template, rowDataStart, rowDataEnd);

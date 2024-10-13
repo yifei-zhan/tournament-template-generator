@@ -1,7 +1,7 @@
 export interface Player {
   name: string;
   teamName: string;
-  playerNumber: string;
+  playerNumber?: string;
 }
 
 export interface Team {
