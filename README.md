@@ -37,19 +37,20 @@ $ docker cp tournament_container:/usr/src/dist/output .
 
 ## Use App via AWS Lambda
 
-... TODO
+...TODO
 
 ## Building & Publishing
 
 ```bash
 # build base image
 $ docker build . -t tournament-base -f Dockerfile.base
+# build aoo image
+$ docker build . -t [image-name]:[tag-name]
 ```
 
 Push to Dockerhub
 
 ```bash
-$ docker build . -t [image-name]:[tag-name]
 # push image to docker-hub
 $ docker login
 $ docker tag [image-name]:[tag-name] [username]/[repository]:[tag-name]
