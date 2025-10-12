@@ -44,6 +44,8 @@ export interface Match {
   isEnded: boolean;
 
   matchId: string;
+  countOnly?: boolean;
+
   matchTime?: string;
   fieldLabel?: string;
 

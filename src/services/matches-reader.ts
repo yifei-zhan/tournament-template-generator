@@ -93,6 +93,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
         }
       : undefined;
   const isEnded = rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "";
+  const countOnly = rawMatch.matchId.endsWith("*");
 
   return {
     groupStage,
@@ -101,6 +102,7 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
     matchTime: rawMatch.matchTime,
     fieldLabel: rawMatch.fieldLabel,
     isEnded,
+    countOnly,
 
     teams: [
       {
@@ -177,7 +179,7 @@ export const getAllMatches = async (): Promise<Match[]> => {
 
   const mappedMatches = matches.map(mapRawMatchToMatch);
 
-  checkMatchesAndThrowIfInvalid(mappedMatches);
+  checkMatchesAndThrowIfInvalid(mappedMatches.filter((match) => !match.countOnly));
 
   return mappedMatches;
 };

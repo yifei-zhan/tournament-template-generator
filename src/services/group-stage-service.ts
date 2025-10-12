@@ -16,7 +16,7 @@ const winLoseRelationComparer: TeamCompareFn = (t1, t2) => {
 interface TeamData {
   teamName: string;
   teamImageSrc?: string;
-  finishedMatchesCount: number;
+  finishedMatchesCount: string;
   winMatchesCount: number;
   loseMatchesCount: number;
   drawMatchesCount: number;
@@ -58,7 +58,9 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
   let drawMatchesCount = 0;
   const wonAgainstTeamNames: string[] = [];
 
-  for (const match of matches) {
+  const matchesForStats = matches.filter((match) => !match.countOnly);
+
+  for (const match of matchesForStats) {
     const { teams, groupStage } = match;
     const currentTeamInMatch = teams.find((t) => t.name === team.name);
     const opponentTeamInMatch = teams.find((t) => t.name !== team.name);
@@ -93,10 +95,12 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
     goalsAgainst += getScore(opponentTeamInMatch.scored);
   }
 
+  const isAnyMatchCountOnly = matchesForStats.length !== matches.length;
+
   return {
     teamName: team.name,
     teamImageSrc: team.imageSrc,
-    finishedMatchesCount: matches.length,
+    finishedMatchesCount: isAnyMatchCountOnly ? `${matches.length}*` : `${matches.length}`,
     winMatchesCount,
     loseMatchesCount,
     drawMatchesCount,
