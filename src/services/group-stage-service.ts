@@ -95,12 +95,10 @@ const getTeamData = (team: Team, matches: Match[]): TeamData => {
     goalsAgainst += getScore(opponentTeamInMatch.scored);
   }
 
-  const isAnyMatchCountOnly = matchesForStats.length !== matches.length;
-
   return {
     teamName: team.name,
     teamImageSrc: team.imageSrc,
-    finishedMatchesCount: isAnyMatchCountOnly ? `${matches.length}*` : `${matches.length}`,
+    finishedMatchesCount: matches.length + "",
     winMatchesCount,
     loseMatchesCount,
     drawMatchesCount,
