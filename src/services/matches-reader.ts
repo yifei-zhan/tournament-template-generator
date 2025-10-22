@@ -92,8 +92,9 @@ const mapRawMatchToMatch = (rawMatch: RawMatch): Match => {
           roundLabel: rawMatch.knockoutRoundLabel,
         }
       : undefined;
-  const isEnded = rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "";
+
   const countOnly = rawMatch.matchId.endsWith("*");
+  const isEnded = countOnly || (rawMatch.team1Scored !== "" && rawMatch.team2Scored !== "");
 
   return {
     groupStage,
