@@ -1,5 +1,7 @@
 import csv
 
+# Run with python3 *.py
+
 with open('matches.csv', 'r', encoding='utf-8') as fin, \
      open('converted_matches.csv', 'w', encoding='utf-8', newline='') as fout:
     reader = csv.reader(fin, delimiter=';')
